@@ -1,0 +1,28 @@
+.seat-mark {
+    position: absolute;
+    z-index: 999;
+    height: 24px;
+    width: 24px;
+    border-radius: 8px;
+    background-color: #006fee;
+    color: #fff;
+    line-height: 2;
+    text-align: center;
+    box-shadow: 1px 1px 5px -2px #000;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.seat-mark:hover {
+    background-color: #014594;
+}
+
+.imagenUno span {
+    top: 50%;
+    /* Posición vertical centrada */
+    left: 50%;
+    /* Posición horizontal centrada */
+    transform: translate(-50%, -50%);
+    /* Centrar el elemento en el centro del contenedor */
+}
