@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import {
   usePostSendOTPUpdateEmailMutation,
   usePutUpdateEmailMutation,
-} from "../../redux/services/userApi";
+} from "../../redux/services/usuariosApi";
 import {
   Modal,
   ModalContent,
@@ -22,9 +22,12 @@ import OtpInput from "react-otp-input";
 import { Link as NextLink } from "@nextui-org/react";
 
 export default function UpdateEmail(data = {}) {
-  const { correo } = data?.data ?? {
+
+
+  const { correo, id } = data?.data ?? {
     correo: "",
   };
+
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState("blur");
@@ -55,7 +58,7 @@ export default function UpdateEmail(data = {}) {
       if (isModal) {
         handleOpen();
       } else {
-        const response = await postSendOTPUpdateEmail(data);
+        const response = await postSendOTPUpdateEmail({...data, id});
         if (response.error) toast.error(response.error.data.message);
         if (response.data) {
           handleOpen();
@@ -75,12 +78,13 @@ export default function UpdateEmail(data = {}) {
         const data = {
           ...getValues(),
           otp,
+          id,
         };
         const response = await putUpdateEmail(data);
         if (response.error) toast.error(response.error.data.message);
         if (response.data) {
           toast.success(response.data.message);
-          setValue("contrasena", "")
+          /* setValue("contrasena", "") */
           setIsModal(false);
           onClose();
         } 
@@ -96,7 +100,8 @@ export default function UpdateEmail(data = {}) {
     try {
       const response = await postSendOTPUpdateEmail({
         correo: watch("correo"),
-        contrasena: watch("contrasena"),
+        /* contrasena: watch("contrasena"), */
+        id: id
       });
       if (response.error) toast.error(response.error.data.message);
       if (response.data) toast.error(response.data.message);
@@ -110,7 +115,7 @@ export default function UpdateEmail(data = {}) {
       <form onSubmit={onSubmit} className="border rounded-lg bg-white  mt-5">
         <div className="border-b py-4 px-4">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Información de la cuenta
+            Actualizar Correo
           </h2>
         </div>
 
@@ -139,7 +144,7 @@ export default function UpdateEmail(data = {}) {
               errorMessage={errors.correo && errors.correo.message}
             />
           </div>
-
+{/* 
           <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
             <div className="sm:col-span-4">
               <Input
@@ -160,7 +165,7 @@ export default function UpdateEmail(data = {}) {
                 errorMessage={errors.contrasena && errors.contrasena.message}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="col-span-full">
             <div className="sm:col-span-3">

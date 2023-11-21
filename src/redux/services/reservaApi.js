@@ -4,7 +4,7 @@ export const reservasApi = createApi({
   reducerPath: "reservas",
   refetchOnFocus: true,
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost/api",
+    baseUrl: process.env.NEXT_PUBLIC_API,
     credentials: "include",
   }),
   tagTypes: ["Reserva"],

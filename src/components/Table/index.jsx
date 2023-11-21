@@ -27,6 +27,7 @@ import { useState, useMemo, useCallback } from "react";
 import Link from "@/components/Link";
 import Select from "@/components/Form/Select";
 import { useRouter } from "next/navigation";
+import Edit from "@/components/Icon/Edit";
 
 /* const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -164,9 +165,9 @@ export default function index({
             {cellValue}
           </Chip>
         );
-      case "acciones":
+      case "accion":
         return (
-          <div className="relative flex justify-end items-center gap-2">
+          <div className="relative flex justify-start items-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -174,13 +175,47 @@ export default function index({
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    router.push(`/admin/colaboradores/${user.id}/editar`);
+                  }}
+                >
+                  Editar
+                </DropdownItem>
+
+                {user.idUsuario === null ? (
+                  <DropdownItem onClick={() => {
+                    router.push(`/admin/usuarios/registro/${user.id}`);
+                  }}>Crear Usuario</DropdownItem>
+                ) : (
+                  <DropdownItem onClick={() => {
+                    router.push(`/admin/usuarios/${user.idUsuario}/editar`);
+                  }}>Editar Usuario</DropdownItem>
+                )}
+
+                <DropdownItem>Crear o Editar Mesero</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
         );
+      case "acciones":
+        return (
+          <div className="relative py-2 flex justify-start items-center gap-2">
+            <Button
+              color="default"
+              variant="bordered"
+              size="sm"
+              className="gap-0 border-hidden font-bold hover:underline"
+              startContent={<Edit />}
+              onClick={() => {
+                router.push(`/admin/usuarios/${user.id}/editar`);
+              }}
+            >
+              Editar
+            </Button>
+          </div>
+        );
+
       default:
         return cellValue;
     }
@@ -199,8 +234,10 @@ export default function index({
   }, [page]);
 
   const onRowsPerPageChange = useCallback((e) => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
+    if (e.target.value !== "") {
+      setRowsPerPage(Number(e.target.value));
+      setPage(1);
+    }
   }, []);
 
   const onSearchChange = useCallback((value) => {
@@ -286,16 +323,17 @@ export default function index({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            
-              <Button
-                color="default"
-                className="bg-zinc-900 text-white"
-                endContent={<PlusIcon />}
-                onClick={ () => {btnLink !== '' ? router.push(btnLink) : ''}}
-              >
-                {btn}
-              </Button>
-    
+
+            <Button
+              color="default"
+              className="bg-zinc-900 text-white"
+              endContent={<PlusIcon />}
+              onClick={() => {
+                btnLink !== "" ? router.push(btnLink) : "";
+              }}
+            >
+              {btn}
+            </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -305,11 +343,11 @@ export default function index({
           <label className="flex w-42 items-center gap-2 text-default-400 text-small">
             <span>Filas por página:</span>
             <Select
-              placeholder=""
               label=""
+              placeholder="5"
               defaultSelectedKeys={["5"]}
               className="w-20"
-              options={[
+              data={[
                 { key: "5", value: "5" },
                 { key: "10", value: "10" },
                 { key: "15", value: "15" },
@@ -334,9 +372,9 @@ export default function index({
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {/* {selectedKeys === "all"
+          {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`} */}
+            : `${selectedKeys.size} of ${filteredItems.length} selected`}
         </span>
         <Pagination
           isCompact
@@ -350,7 +388,7 @@ export default function index({
           total={pages}
           onChange={setPage}
         />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2">
+        <div className="hidden sm:flex w-[30%] justify-end gap-2 ">
           <Button
             isDisabled={pages === 1}
             size="sm"
@@ -372,15 +410,14 @@ export default function index({
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  /*   const loadingState = loading || data?.length === 0 ? "loading" : "idle"; */
   return (
     <Table
       aria-label="Example table with custom cells, pagination and sorting"
       isHeaderSticky
-      bottomContent={bottomContent}
+      bottomContent={!isLoading && bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[400px]",
       }}
       /*  selectedKeys={selectedKeys} */
       /*  selectionMode="multiple" */

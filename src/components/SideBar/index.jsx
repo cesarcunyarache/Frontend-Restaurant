@@ -5,13 +5,20 @@ import Close from "@/components/Icon/Close";
 import Menu from "@/components/Icon/Menu";
 import Home from "@/components/Icon/Home";
 import Reservas from "@/components/Icon/Reservas";
+import Mesero from "@/components/Icon/Mesero";
 import Logo from "@/components/Icon/Logo";
 import Colaboradores from "@/components/Icon/Colaboradores";
+import Mesas from "@/components/Icon/Mesas";
 import Logout from "@/components/Icon/Logout";
 import Profile from "@/components/Icon/Profile";
 import Edit from "@/components/Icon/Edit";
+import Acount from "@/components/Icon/Acount";
+import Comentarios from "@/components/Icon/Comentarios";
+import Puntos from "@/components/Icon/Puntos";
 import Qr from "@/components/Icon/Qr";
 import Link from "next/link";
+import Users from '@/components/Icon/Users'
+import Customers from '@/components/Icon/Customers'
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button, Avatar } from "@nextui-org/react";
@@ -44,6 +51,45 @@ export default function SideBar() {
       title: "Colaboradores",
       path: "/admin/colaboradores",
       icon: <Colaboradores />,
+    },
+
+    {
+      title: "Usuarios",
+      path: "/admin/usuarios",
+      icon: <Users />,
+    },
+
+    {
+      title: "Clientes",
+      path: "/admin/clientes",
+      icon: <Customers/>,
+    },
+
+    {
+      title: "Mesas",
+      path: "/admin/mesas",
+      icon: <Mesas/>,
+    },
+    {
+      title: "Meseros",
+      path: "/admin/meseros",
+      icon: <Mesero/>,
+    },
+
+    {
+      title: "Cuentas de Clientes",
+      path: "/admin/cuentas",
+      icon: <Acount/>,
+    },
+    {
+      title: "Comentarios",
+      path: "/admin/comentarios",
+      icon: <Comentarios/>,
+    },
+    {
+      title: "Puntos",
+      path: "/admin/puntos",
+      icon: <Puntos/>,
     },
   ];
 

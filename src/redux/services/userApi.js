@@ -10,63 +10,13 @@ export const userApi = createApi({
   tagTypes: ["Profile"],
   endpoints: (builder) => ({
     postLogin: builder.mutation({
-      
       query: (data) => ({
         url: "/colaboradorAuth/login",
         method: "POST",
         body: data,
       }),
     }),
-
-    postRegister: builder.mutation({
-      query: (data) => ({
-        url: "/clienteAuth/register",
-        method: "POST",
-        body: data,
-        credentials: "include",
-      }),
-    }),
-
-    getProfile: builder.query({
-      query: () => "/clienteAuth/profile",
-      providesTags: ["Profile"],
-    }),
-
-    getVerify: builder.query({
-      query: () => "/clienteAuth/verify",
-    }),
-
-    getColaboradores: builder.query({
-      query: () => "/colaborador/",
-    }),
-
-    putUpdate: builder.mutation({
-      query: (data) => ({
-        url: "/cliente/",
-        method: "PUT",
-        body: data,
-        credentials: "include",
-      }),
-    }),
-
-    postSendOTP: builder.mutation({
-      query: (data) => ({
-        url: "/clienteAuth/sendOtp",
-        method: "POST",
-        body: data,
-        credentials: "include",
-      }),
-    }),
-
-    postResendOTP: builder.mutation({
-      query: (data) => ({
-        url: "/clienteAuth/resendOtp",
-        method: "POST",
-        body: data,
-        credentials: "include",
-      }),
-    }),
-
+    
     postForgetPassword: builder.mutation({
       query: (data) => ({
         url: "colaboradorAuth/forgetPassword",
@@ -85,6 +35,15 @@ export const userApi = createApi({
       }),
     }),
 
+    postSendOTP: builder.mutation({
+      query: (data) => ({
+        url: "/colaboradorAuth/sendOtp",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
     postLogout: builder.mutation({
       query: () => ({
         url: "/clienteAuth/logout",
@@ -93,28 +52,23 @@ export const userApi = createApi({
       }),
     }),
 
-    postSendOTPUpdateEmail: builder.mutation({
+
+
+
+
+    getProfile: builder.query({
+      query: () => "/clienteAuth/profile",
+      providesTags: ["Profile"],
+    }),
+
+    getVerify: builder.query({
+      query: () => "/clienteAuth/verify",
+    }),
+
+    postResendOTP: builder.mutation({
       query: (data) => ({
-        url: "clienteAuth/sendOtpUpdateEmail",
+        url: "/clienteAuth/resendOtp",
         method: "POST",
-        body: data,
-        credentials: "include",
-      }),
-    }),
-
-    putUpdateEmail: builder.mutation({
-      query: (data) => ({
-        url: "clienteAuth/updateEmail",
-        method: "PUT",
-        body: data,
-        credentials: "include",
-      }),
-    }),
-
-    putUpdatePassword: builder.mutation({
-      query: (data) => ({
-        url: "clienteAuth/updatePassword",
-        method: "PUT",
         body: data,
         credentials: "include",
       }),
@@ -126,17 +80,11 @@ export const userApi = createApi({
 
 export const {
   usePostLoginMutation,
-  usePostRegisterMutation,
   useGetProfileQuery,
   useGetVerifyQuery,
-  usePutUpdateMutation,
   usePostSendOTPMutation,
   usePostResendOTPMutation,
   usePostForgetPasswordMutation,
   usePutResetPasswordMutation,
   usePostLogoutMutation,
-  usePutUpdateEmailMutation,
-  usePostSendOTPUpdateEmailMutation,
-  usePutUpdatePasswordMutation,
-  useGetColaboradoresQuery,
 } = userApi;
