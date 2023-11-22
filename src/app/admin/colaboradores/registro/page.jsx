@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import {
   usePostCreateMutation,
   usePutUpdateMutation,
-} from "@/redux/services/colaborador";
+} from "@/redux/services/colaboradorApi";
 import Select from "@/components/Form/Select";
 import Textarea from "@/components/Form/Textarea";
 import Breadcrumbs from "@/components/Breadcrumbs";

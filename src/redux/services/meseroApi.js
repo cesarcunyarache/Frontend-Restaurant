@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const colaboradorApi = createApi({
-  reducerPath: "colaboradores",
+export const meseroApi = createApi({
+  reducerPath: "mesero",
   refetchOnFocus: true,
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API,
     credentials: "include",
   }),
-  tagTypes: ["Colaboradores", "getSearchById"],
+  tagTypes: ["mesero", "getSearchByIdMesero"],
   endpoints: (builder) => ({
 
     getColaboradores: builder.query({
@@ -17,12 +17,12 @@ export const colaboradorApi = createApi({
 
     getSearchById: builder.query({
       query: (id) => ({ url: `colaborador/${id}` }),
-      providesTags: (result, error, id) => [{ type: "getSearchById", id }],
+      providesTags: (result, error, id) => [{ type: "getSearchByIdMesero", id }],
     }),
 
     postCreate: builder.mutation({
       query: (data) => ({
-        url: "colaborador/",
+        url: "mesero/",
         method: "POST",
         body: data,
         credentials: "include",
@@ -36,6 +36,9 @@ export const colaboradorApi = createApi({
         method: "PUT",
         body: data,
         credentials: "include",
+        headers: {
+          'Content-Type': 'application/json', // Establece el Content-Type a application/json
+        },
       }),
       invalidatesTags: (result, error, { id }) => [
         { type: "Colaboradores" },
@@ -50,4 +53,4 @@ export const {
   useGetSearchByIdQuery,
   usePostCreateMutation,
   usePutUpdateMutation,
-} = colaboradorApi;
+} = meseroApi;

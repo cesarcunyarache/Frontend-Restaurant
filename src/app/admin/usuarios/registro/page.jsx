@@ -23,7 +23,7 @@ import Select from "@/components/Form/Select";
 import Textarea from "@/components/Form/Textarea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
-import { useGetColaboradoresQuery } from "@/redux/services/colaborador";
+import { useGetColaboradoresQuery } from "@/redux/services/colaboradorApi";
 
 import { usePostSendOTPMutation } from "@/redux/services/userApi";
 

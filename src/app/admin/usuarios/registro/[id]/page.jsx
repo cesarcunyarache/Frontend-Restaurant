@@ -2,7 +2,7 @@
 import Load from "@/components/Load";
 import { useEffect, useState } from "react";
 import Page from "@/app/admin/usuarios/registro/page";
-import { useGetSearchByIdQuery } from "@/redux/services/colaborador";
+import { useGetSearchByIdQuery } from "@/redux/services/colaboradorApi";
 export default function page({ params }) {
   const { data, isLoading } = useGetSearchByIdQuery(params?.id);
 

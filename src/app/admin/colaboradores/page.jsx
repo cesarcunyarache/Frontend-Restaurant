@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetColaboradoresQuery } from "@/redux/services/colaborador";
+import { useGetColaboradoresQuery } from "@/redux/services/colaboradorApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
