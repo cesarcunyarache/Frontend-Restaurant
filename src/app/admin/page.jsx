@@ -22,6 +22,8 @@ export default function page() {
     { name: "Correo", uid: "correo", sortable: true },
     { name: "Contraseña", uid: "contrasena", sortable: true },
     { name: "Apellidos", uid: "idRol", sortable: true },
+    {name: "Nombres", uid: "nombres", sortable: true, search: true},
+    {name: "Número de documento", uid: "numeroDoc", sortable: true, search: true},
     { name: "Accion", uid: "accion" },
   ];
 

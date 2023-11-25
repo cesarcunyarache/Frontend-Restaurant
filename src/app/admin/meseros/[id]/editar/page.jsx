@@ -1,14 +1,11 @@
 "use client";
 import Load from "@/components/Load";
 import {useEffect, useState} from 'react'
-import Page from "@/app/admin/colaboradores/registro/page";
-import { useGetSearchByIdQuery } from "@/redux/services/colaboradorApi";
+import Page from "@/app/admin/meseros/registro/page";
+import { useGetSearchByIdColaboradorQuery } from "@/redux/services/meseroApi";
 export default function page({ params }) {
-  const  { data, isLoading, refetch } = useGetSearchByIdQuery(params?.id);
+  const  { data, isLoading, refetch } = useGetSearchByIdColaboradorQuery(params?.id);
 
-  useEffect (() => {
-    refetch();
-  }, [])
   return (
     <div className="w-full h-full">
       {isLoading ? (

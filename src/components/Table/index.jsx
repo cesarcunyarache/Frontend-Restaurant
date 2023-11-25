@@ -62,6 +62,7 @@ export default function index({
   btn = "",
   btnLink = "",
   status = false,
+  isActiveBtn = false,
 }) {
   const router = useRouter();
   const users = !isLoading ? data : [];
@@ -94,10 +95,18 @@ export default function index({
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter(
-        (user) =>
-          user.nombres.toLowerCase().includes(filterValue.toLowerCase()) ||
+        (user) => {
+          return columns.some((column) => {
+            if (column.search) {
+              const value = user[column.uid]?.toString().toLowerCase();
+              return value?.includes(filterValue?.toLowerCase());
+            }
+            return false;
+          });
+        }
+        /*  user.nombres.toLowerCase().includes(filterValue.toLowerCase()) ||
           user.apellidos.toLowerCase().includes(filterValue.toLowerCase()) ||
-          user.telefono.includes(filterValue)
+          user.telefono.toLowerCase().includes(filterValue) */
       );
     }
     if (
@@ -138,13 +147,31 @@ export default function index({
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
+            avatarProps={{ radius: "sm", isBordered: true, className: "mr-2" }}
+            description={user.numeroDoc}
+            name={user.nombres}
           >
-            {user.email}
+            {user.numeroDoc}
           </User>
         );
+
+      case "infoMesero":
+        return (
+          <User
+            avatarProps={{
+              radius: "sm",
+              isBordered: true,
+              className: "mr-2",
+              src: user.imagen,
+              name: user.nombres,
+            }}
+            description={user.numeroDoc}
+            name={user.nombres}
+          >
+            {user.numeroDoc}
+          </User>
+        );
+
       case "role":
         return (
           <div className="flex flex-col">
@@ -184,16 +211,30 @@ export default function index({
                 </DropdownItem>
 
                 {user.idUsuario === null ? (
-                  <DropdownItem onClick={() => {
-                    router.push(`/admin/usuarios/registro/${user.id}`);
-                  }}>Crear Usuario</DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      router.push(`/admin/usuarios/registro/${user.id}`);
+                    }}
+                  >
+                    Crear Usuario
+                  </DropdownItem>
                 ) : (
-                  <DropdownItem onClick={() => {
-                    router.push(`/admin/usuarios/${user.idUsuario}/editar`);
-                  }}>Editar Usuario</DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      router.push(`/admin/usuarios/${user.idUsuario}/editar`);
+                    }}
+                  >
+                    Editar Usuario
+                  </DropdownItem>
                 )}
 
-                <DropdownItem>Crear o Editar Mesero</DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    router.push(`/admin/meseros/registro/${user.id}`);
+                  }}
+                >
+                  Crear o Editar Mesero
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -209,6 +250,23 @@ export default function index({
               startContent={<Edit />}
               onClick={() => {
                 router.push(`/admin/usuarios/${user.id}/editar`);
+              }}
+            >
+              Editar
+            </Button>
+          </div>
+        );
+      case "accionMesero":
+        return (
+          <div className="relative py-2 flex justify-start items-center gap-2">
+            <Button
+              color="default"
+              variant="bordered"
+              size="sm"
+              className="gap-0 border-hidden font-bold hover:underline"
+              startContent={<Edit />}
+              onClick={() => {
+                router.push(`/admin/meseros/${user.id}/editar`);
               }}
             >
               Editar
@@ -324,16 +382,18 @@ export default function index({
               </DropdownMenu>
             </Dropdown>
 
-            <Button
-              color="default"
-              className="bg-zinc-900 text-white"
-              endContent={<PlusIcon />}
-              onClick={() => {
-                btnLink !== "" ? router.push(btnLink) : "";
-              }}
-            >
-              {btn}
-            </Button>
+            {isActiveBtn && (
+              <Button
+                color="default"
+                className="bg-zinc-900 text-white"
+                endContent={<PlusIcon />}
+                onClick={() => {
+                  btnLink !== "" ? router.push(btnLink) : "";
+                }}
+              >
+                {btn}
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -370,12 +430,12 @@ export default function index({
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
+      <div className="py-2 px-2 flex justify-end items-center ">
+        {/* <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span>
+        </span> */}
         <Pagination
           isCompact
           showControls
@@ -388,7 +448,7 @@ export default function index({
           total={pages}
           onChange={setPage}
         />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2 ">
+        <div className="hidden sm:flex w-[30%] justify-end gap-2 ml-24">
           <Button
             isDisabled={pages === 1}
             size="sm"

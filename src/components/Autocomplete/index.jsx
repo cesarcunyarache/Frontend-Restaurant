@@ -25,6 +25,7 @@ export default function index({
       placeholder="Seleccione el colaborador"
       radius="sm"
       size="md"
+      popoverContent
       key={name}
       {...props}
       {...register(name, options)}

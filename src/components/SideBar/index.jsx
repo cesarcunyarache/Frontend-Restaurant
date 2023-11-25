@@ -78,7 +78,7 @@ export default function SideBar() {
 
     {
       title: "Cuentas de Clientes",
-      path: "/admin/cuentas",
+      path: "/admin/cuentasClientes",
       icon: <Acount/>,
     },
     {

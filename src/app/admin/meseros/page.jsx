@@ -1,35 +1,29 @@
 "use client";
 
-import { useGetColaboradoresQuery } from "@/redux/services/colaboradorApi";
+import { useGetMeserosQuery } from "@/redux/services/meseroApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
 export default function page() {
-  const { data, isLoading, isError, error } = useGetColaboradoresQuery();
+  const { data, isLoading, isError, error } = useGetMeserosQuery();
 
   const users = !isLoading ? data.data : [];
 
 
   const inicialVisibleColumns = [
     "id",
-    "numeroDoc",
-    "nombres", 
-    "apellidos",
-    "fechaNacimiento",
-    "accion",
+    "infoMesero",
+    "estado", 
+    "accionMesero",
   ];
 
   const columns = [
     {name: "ID", uid: "id", sortable: true},
-    {name: "Tipo de Documento", uid: "idTipoDoc"},
-    {name: "Número de documento", uid: "numeroDoc", sortable: true},
-    {name: "Nombres", uid: "nombres", sortable: true},
-    {name: "Apellidos", uid: "apellidos", sortable: true},
-    {name: "Telefono", uid: "telefono", sortable: true},
-    {name: "Fecha de Nacimiento", uid: "fechaNacimiento", sortable: true},
-    {name: "Género", uid: "genero", sortable: true},
-    {name: "Dirección", uid: "direccion"},
-    {name: "Accion", uid: "accion"}, 
+    {name: "Información Personal", uid: "infoMesero"},
+    {name: "Nombres", uid: "nombres", sortable: true, search: true},
+    {name: "Número de documento", uid: "numeroD", sortable: true, search: true},
+    {name: "Estado", uid: "estado", sortable: true},
+    {name: "Accion", uid: "accionMesero"}, 
   ];
 
   return (
@@ -37,15 +31,15 @@ export default function page() {
        <Breadcrumbs
         data={[
           {
-            value: "Colaboradores",
-            href: "/admin/colaboradores",
+            value: "Meseros",
+            href: "/admin/meseros",
           },
           {
             value: "Lista",
-            href: "/admin/colaboradores/",
+            href: "/admin/meseros/",
           },
         ]}
-        title={"Colaboradores"}
+        title={"Meseros"}
       />
       <div className="w-full h-full border rounded-lg mt-4 bg-white p-4">
         <Table
@@ -53,8 +47,9 @@ export default function page() {
           columns={columns}
           isLoading={isLoading}
           data={users}
-          btn="Nuevo Colaborador"
-          btnLink="colaboradores/registro"
+          isActiveBtn={true}
+          btn="Nuevo Mesero"
+          btnLink="meseros/registro"
           /* status={true} */
         />
       </div>

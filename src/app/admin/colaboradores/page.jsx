@@ -20,15 +20,15 @@ export default function page() {
   ];
 
   const columns = [
-    {name: "ID", uid: "id", sortable: true},
-    {name: "Tipo de Documento", uid: "idTipoDoc"},
-    {name: "Número de documento", uid: "numeroDoc", sortable: true},
-    {name: "Nombres", uid: "nombres", sortable: true},
-    {name: "Apellidos", uid: "apellidos", sortable: true},
-    {name: "Telefono", uid: "telefono", sortable: true},
-    {name: "Fecha de Nacimiento", uid: "fechaNacimiento", sortable: true},
-    {name: "Género", uid: "genero", sortable: true},
-    {name: "Dirección", uid: "direccion"},
+    {name: "ID", uid: "id", sortable: true, search: true},
+    {name: "Tipo de Documento", uid: "idTipoDoc", search: true},
+    {name: "Número de documento", uid: "numeroDoc", sortable: true, search: true},
+    {name: "Nombres", uid: "nombres", sortable: true, search: true},
+    {name: "Apellidos", uid: "apellidos", sortable: true,  search: true},
+    {name: "Telefono", uid: "telefono", sortable: true,  search: true},
+    {name: "Fecha de Nacimiento", uid: "fechaNacimiento", sortable: true, search: true},
+    {name: "Género", uid: "genero", sortable: true,  search: true},
+    {name: "Dirección", uid: "direccion",  search: true},
     {name: "Accion", uid: "accion"}, 
   ];
 

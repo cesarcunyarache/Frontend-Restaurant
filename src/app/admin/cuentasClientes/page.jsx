@@ -1,11 +1,13 @@
 "use client";
 
-import { useGetUsuariosQuery } from "@/redux/services/usuariosApi";
+import { useGetUsuariosClientesQuery } from "@/redux/services/clienteApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
 export default function page() {
-  const { data, isLoading, isError, error } = useGetUsuariosQuery();
+  const { data, isLoading, isError, error } = useGetUsuariosClientesQuery();
+
+  console.log(data);
 
   const users = !isLoading ? data.data : [];
 
@@ -14,7 +16,7 @@ export default function page() {
     "id",
     "correo",
     "name",
-    "acciones",
+   /*  "acciones", */
   ];
 
   const columns = [
@@ -22,10 +24,9 @@ export default function page() {
     { name: "Información Personal", uid: "name"},
     { name: "Correo", uid: "correo", sortable: true,  search: true },
     { name: "Contraseña", uid: "contrasena", sortable: true ,  search: true},
-    { name: "Rol", uid: "idRol", sortable: true },
     {name: "Nombres", uid: "nombres", sortable: true, search: true},
     {name: "Número de documento", uid: "numeroDoc", sortable: true, search: true},
-    { name: "Accion", uid: "acciones" },
+   /*  { name: "Accion", uid: "acciones" }, */
   ];
 
   return (
@@ -33,15 +34,15 @@ export default function page() {
        <Breadcrumbs
         data={[
           {
-            value: "Usuarios",
-            href: "/admin/usuarios",
+            value: "Cuentas Clientes",
+            href: "/admin/cuentasClientes",
           },
           {
             value: "Lista",
-            href: "/admin/usuarios/",
+            href: "/admin/cuentasClientes/",
           },
         ]}
-        title={"Usuarios"}
+        title={"Cuentas Clientes"}
       />
       <div className="w-full h-full border rounded-lg mt-4 bg-white p-4">
         <Table

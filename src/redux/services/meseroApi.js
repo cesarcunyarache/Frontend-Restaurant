@@ -7,50 +7,58 @@ export const meseroApi = createApi({
     baseUrl: process.env.NEXT_PUBLIC_API,
     credentials: "include",
   }),
-  tagTypes: ["mesero", "getSearchByIdMesero"],
+  tagTypes: ["meseros", "getSearchByIdMesero",  "getColaboradoresNoMeseros"],
   endpoints: (builder) => ({
 
-    getColaboradores: builder.query({
-      query: () => "/colaborador/",
-      providesTags: ["Colaboradores"],
+    getMeseros: builder.query({
+      query: () => "/mesero/",
+      providesTags: ["meseros"],
     }),
 
-    getSearchById: builder.query({
-      query: (id) => ({ url: `colaborador/${id}` }),
+    getColaboradoresNoMeseros: builder.query({
+      query: () => "/colaborador/NoMesero",
+      providesTags: (result, error, id) => [{ type: "getColaboradoresNoMeseros", id }],
+    }),
+
+    getSearchByIdColaborador: builder.query({
+      query: (id) => ({ url: `mesero/${id}` }),
       providesTags: (result, error, id) => [{ type: "getSearchByIdMesero", id }],
     }),
 
-    postCreate: builder.mutation({
+    postCreateMesero: builder.mutation({
       query: (data) => ({
         url: "mesero/",
         method: "POST",
         body: data,
         credentials: "include",
       }),
-      invalidatesTags: ["Colaboradores"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "meseros" },
+        { type: "getSearchByIdMesero", id },
+        { type: "getColaboradoresNoMeseros", id },
+      ],
     }),
 
-    putUpdate: builder.mutation({
+    putUpdateMesero: builder.mutation({
       query: (data) => ({
-        url: "colaborador/",
-        method: "PUT",
+        url: "mesero/update",
+        method: "POST",
         body: data,
         credentials: "include",
-        headers: {
-          'Content-Type': 'application/json', // Establece el Content-Type a application/json
-        },
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: "Colaboradores" },
-        { type: "getSearchById", id },
+        { type: "meseros" },
+        { type: "getSearchByIdMesero", id },
+        { type: "getColaboradoresNoMeseros", id },
       ],
     }),
   }),
 });
 
 export const {
-  useGetColaboradoresQuery,
-  useGetSearchByIdQuery,
-  usePostCreateMutation,
-  usePutUpdateMutation,
+  useGetMeserosQuery,
+  useGetSearchByIdColaboradorQuery,
+  useGetColaboradoresNoMeserosQuery,
+  usePostCreateMeseroMutation,
+  usePutUpdateMeseroMutation,
 } = meseroApi;
