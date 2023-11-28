@@ -9,12 +9,16 @@ export const reservasApi = createApi({
   }),
   tagTypes: ["Reserva"],
   endpoints: (builder) => ({
-    getReservar: builder.query({
+    getReservas: builder.query({
       query: () => "/reserva/",
+    }),
+
+    getReservaById: builder.query({
+      query: (id) => ({ url: `reserva/${id}` }),
     }),
   }),
 });
 
 
 
-export const { useGetReservarQuery } = reservasApi;
+export const { useGetReservasQuery, useGetReservaByIdQuery } = reservasApi;

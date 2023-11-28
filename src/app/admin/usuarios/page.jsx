@@ -49,6 +49,7 @@ export default function page() {
           columns={columns}
           isLoading={isLoading}
           data={users}
+          isActiveBtn={true}
           btn="Nuevo Usuario"
           btnLink="usuarios/registro"
           /* status={true} */

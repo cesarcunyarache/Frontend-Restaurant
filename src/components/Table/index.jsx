@@ -28,6 +28,7 @@ import Link from "@/components/Link";
 import Select from "@/components/Form/Select";
 import { useRouter } from "next/navigation";
 import Edit from "@/components/Icon/Edit";
+import Qr from '@/components/Icon/Qr'
 
 /* const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -47,9 +48,11 @@ const statusOptions = [
 ];
 
 const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
+  0: { estado: "danger", text: "Cancelada" },
+  1: { estado: "warning", text: "Pendiente" },
+  2: { estado: "primary", text: "Asistió" },
+  3: { estado: "default", text: "No presentado" },
+  4: { estado: "success", text: "Completada" },
 };
 
 /* const inicialVisibleColumns = ["id","nombres", "apellidos", "telefono", "fechaNacimiento", "acciones"];
@@ -147,13 +150,26 @@ export default function index({
       case "name":
         return (
           <User
-            avatarProps={{ radius: "sm", isBordered: true, className: "mr-2" }}
+            avatarProps={{ radius: "sm", isBordered: true, className: "mr-2 animate-pulse" }}
             description={user.numeroDoc}
             name={user.nombres}
+           
           >
             {user.numeroDoc}
           </User>
         );
+
+        case "infoClient":
+          return (
+            <User
+              avatarProps={{ radius: "full", isBordered: true, className: "mr-2 animate-pulse" }}
+              description={user.numeroDoc}
+              name={user.nombres}
+             
+            >
+              {user.numeroDoc}
+            </User>
+          );
 
       case "infoMesero":
         return (
@@ -181,16 +197,38 @@ export default function index({
             </p>
           </div>
         );
-      case "status":
+      case "estadoReserva":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[user.status]}
+            color={statusColorMap[user.estado].estado}
             size="sm"
             variant="flat"
           >
-            {cellValue}
+            {statusColorMap[user.estado].text}
           </Chip>
+        );
+
+      case "accionReserva":
+        return (
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <VerticalDotsIcon className="text-default-300" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onClick={() => {
+                    router.push(`/admin/colaboradores/${user.id}/editar`);
+                  }}
+                >
+                  Ver Detalle
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         );
       case "accion":
         return (
@@ -386,7 +424,7 @@ export default function index({
               <Button
                 color="default"
                 className="bg-zinc-900 text-white"
-                endContent={<PlusIcon />}
+                endContent={btn === "Escanear Qr" ? <Qr/> : <PlusIcon />}
                 onClick={() => {
                   btnLink !== "" ? router.push(btnLink) : "";
                 }}
