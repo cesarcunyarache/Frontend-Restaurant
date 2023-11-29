@@ -21,7 +21,7 @@ import Link from "next/link";
 import Users from "@/components/Icon/Users";
 import Customers from "@/components/Icon/Customers";
 import { useState, useEffect } from "react";
-import { usePathname, useRouter} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button, Avatar } from "@nextui-org/react";
 import {
   Dropdown,
@@ -41,14 +41,30 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-
 import { QrReader } from "react-qr-reader";
 
+import {
+  usePostLogoutMutation,
+  useGetProfileQuery,
+} from "@/redux/services/userApi";
 
-import { usePostLogoutMutation } from "@/redux/services/userApi";
-
+const selectRol = (rol) => {
+  switch (rol) {
+    case 1:
+      return "Gerente";
+    case 2:
+      return "Administrador";
+    case 3:
+      return "Colaborador";
+  }
+};
 
 export default function SideBar() {
+  const { data: profile, isLoading, isError, error } = useGetProfileQuery();
+
+  console.log(profile);
+
+  if (isError) console.log(error);
   const [postLogout] = usePostLogoutMutation();
   const pathname = usePathname();
   const router = useRouter();
@@ -66,43 +82,53 @@ export default function SideBar() {
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const navLinks = [
-    { title: "Dashboard", path: "/admin", icon: <Home /> },
-    { title: "Reservas", path: "/admin/reservas", icon: <Reservas /> },
+    { title: "Dashboard", path: "/admin", icon: <Home />, idRol: 2 },
+    {
+      title: "Reservas",
+      path: "/admin/reservas",
+      icon: <Reservas />,
+      idRol: 3,
+    },
     {
       title: "Colaboradores",
       path: "/admin/colaboradores",
       icon: <Colaboradores />,
+      idRol: 2,
     },
 
     {
       title: "Usuarios",
       path: "/admin/usuarios",
       icon: <Users />,
+      idRol: 2,
     },
 
     {
       title: "Clientes",
       path: "/admin/clientes",
       icon: <Customers />,
+      idRol: 3,
     },
 
-    {
+    /*  {
       title: "Mesas",
       path: "/admin/mesas",
       icon: <Mesas />,
-    },
+    }, */
     {
       title: "Meseros",
       path: "/admin/meseros",
       icon: <Mesero />,
+      idRol: 2,
     },
 
     {
       title: "Cuentas de Clientes",
       path: "/admin/cuentasClientes",
       icon: <Acount />,
+      idRol: 2
     },
-    {
+    /* {
       title: "Comentarios",
       path: "/admin/comentarios",
       icon: <Comentarios />,
@@ -111,16 +137,9 @@ export default function SideBar() {
       title: "Puntos",
       path: "/admin/puntos",
       icon: <Puntos />,
-    },
+    }, */
   ];
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [backdrop, setBackdrop] = useState("blur");
-  const [isModal, setIsModal] = useState(false);
-
-  const handleOpen = (backdrop) => {
-    onOpen();
-  };
   const handeLogout = async () => {
     const response = await postLogout();
     console.log(response);
@@ -128,7 +147,6 @@ export default function SideBar() {
   };
 
   useEffect(() => {
-
     /* const scanner = new Html5QrcodeScanner('reader', {
       qrbox: {
         width: 250,
@@ -149,7 +167,7 @@ export default function SideBar() {
          console.log(error) 
     }
  */
-  }, []) 
+  }, []);
 
   return (
     <>
@@ -184,7 +202,9 @@ export default function SideBar() {
 
         <nav className="navegacion my-4 h-full ">
           <ul>
-            {navLinks.map((link) => (
+            {navLinks.map((link) =>  {
+              if (!isLoading && link.idRol >= profile?.data?.idRol ) {
+                return (
               <li key={link.title} className="flex w-full mt-1">
                 <Button
                   color="default"
@@ -218,8 +238,9 @@ export default function SideBar() {
                     </span>
                   </Link>
                 </Button>
-              </li>
-            ))}
+              </li>)
+              }
+            })}
           </ul>
         </nav>
         <hr />
@@ -238,10 +259,10 @@ export default function SideBar() {
               }`}
             >
               <h4 className="text-small font-semibold leading-none text-default-600">
-                Cesar Cunyarache
+                {profile?.data?.nombres}
               </h4>
               <h5 className="text-small tracking-tight text-default-400">
-                @csarcastillo
+                {selectRol(profile?.data?.idRol)}
               </h5>
             </div>
 
@@ -270,19 +291,18 @@ export default function SideBar() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="flat">
-                <DropdownItem key="perfil" startContent={<Profile />}>
+                {/*  <DropdownItem key="perfil" startContent={<Profile />}>
                   Perfil
                 </DropdownItem>
                 <DropdownItem key="editar" startContent={<Edit />}>
                   Editar
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem
                   key="qr"
                   showDivider
                   startContent={<Qr />}
                   onClick={() => {
-                    setIsCameraOpen(true)
-                    handleOpen();
+                    router.push("/admin/reservas/escanear");
                   }}
                 >
                   Qr
@@ -294,67 +314,13 @@ export default function SideBar() {
                   startContent={<Logout />}
                   onClick={handeLogout}
                 >
-                  Logout
+                  Cerrar Sesión
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
         </div>
       </div>
-
-      <Modal
-        backdrop={backdrop}
-        isOpen={isOpen}
-        onClose={onClose}
-        placement="center"
-        scrollBehavior="inside"
-        size="3xl"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col text-center">
-                <h1 className="font-bold">Escanear Qr</h1>
-              </ModalHeader>
-              <ModalBody className="m-2 ">
-                <form>
-                  <div className="">
-                    {isCameraOpen && (
-                      <div className="max-w-xl p-2 border border-dashed rounded m-auto">
-                        <QrReader
-            
-                          onResult={(result, error) => {
-                            if (!!result) {
-                              setData(result?.text);
-                              
-                        
-                              if (data !== "") {
-                                  onClose();
-                                 router.push(`/admin/reservas/${data}`)
-                              }
-                              console.log(data)
-                              setIsCameraOpen(false);
-                              setHasReadCode(true);
-
-                            }
-
-                            if (!!error) {
-                              /*   console.info(error); */
-                            }
-                          }}
-                          style={{ width: "100%" }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </form>
-              </ModalBody>
-
-              
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </>
   );
 }

@@ -28,7 +28,7 @@ import Link from "@/components/Link";
 import Select from "@/components/Form/Select";
 import { useRouter } from "next/navigation";
 import Edit from "@/components/Icon/Edit";
-import Qr from '@/components/Icon/Qr'
+import Qr from "@/components/Icon/Qr";
 
 /* const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -42,10 +42,11 @@ import Qr from '@/components/Icon/Qr'
 ]; */
 
 const statusOptions = [
-  { name: "Active", uid: "active" },
-  { name: "Paused", uid: "paused" },
-  { name: "Vacation", uid: "vacation" },
-  { name: "danger", uid: "Cancelada" }
+  { name: "Cancelada", uid: "0" },
+  { name: "Pendiente", uid: "1" },
+  { name: "Asistió", uid: "2" },
+  { name: "No presentado", uid: "3" },
+  { name: "Completada", uid: "4" },
 ];
 
 const statusColorMap = {
@@ -67,7 +68,7 @@ export default function index({
   btnLink = "",
   status = false,
   isActiveBtn = false,
-
+  isSearch = true,
 }) {
   const router = useRouter();
   const users = !isLoading ? data : [];
@@ -90,8 +91,8 @@ export default function index({
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
 
-    return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+    return columns?.filter((column) =>
+      Array.from(visibleColumns)?.includes(column?.uid)
     );
   }, [visibleColumns]);
 
@@ -99,11 +100,11 @@ export default function index({
     let filteredUsers = [...users];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter(
+      filteredUsers = filteredUsers?.filter(
         (user) => {
-          return columns.some((column) => {
-            if (column.search) {
-              const value = user[column.uid]?.toString().toLowerCase();
+          return columns?.some((column) => {
+            if (column?.search) {
+              const value = user[column?.uid]?.toString()?.toLowerCase();
               return value?.includes(filterValue?.toLowerCase());
             }
             return false;
@@ -114,12 +115,13 @@ export default function index({
           user.telefono.toLowerCase().includes(filterValue) */
       );
     }
+
     if (
       statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
+      Array.from(statusFilter)?.length !== statusOptions?.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredUsers = filteredUsers?.filter((user) =>
+        Array.from(statusFilter)?.includes(user.estado)
       );
     }
 
@@ -152,26 +154,32 @@ export default function index({
       case "name":
         return (
           <User
-            avatarProps={{ radius: "sm", isBordered: true, className: "mr-2 animate-pulse" }}
+            avatarProps={{
+              radius: "sm",
+              isBordered: true,
+              className: "mr-2 animate-pulse",
+            }}
             description={user.numeroDoc}
             name={user.nombres}
-           
           >
             {user.numeroDoc}
           </User>
         );
 
-        case "infoClient":
-          return (
-            <User
-              avatarProps={{ radius: "full", isBordered: true, className: "mr-2 animate-pulse" }}
-              description={user.numeroDoc}
-              name={user.nombres}
-             
-            >
-              {user.numeroDoc}
-            </User>
-          );
+      case "infoClient":
+        return (
+          <User
+            avatarProps={{
+              radius: "full",
+              isBordered: true,
+              className: "mr-2 animate-pulse",
+            }}
+            description={user?.numeroDoc}
+            name={user?.nombres}
+          >
+            {user?.numeroDoc}
+          </User>
+        );
 
       case "infoMesero":
         return (
@@ -223,7 +231,7 @@ export default function index({
               <DropdownMenu>
                 <DropdownItem
                   onClick={() => {
-                    router.push(`/admin/colaboradores/${user.id}/editar`);
+                    router.push(`/admin/reservas/${user.idReserva}/`);
                   }}
                 >
                   Ver Detalle
@@ -355,20 +363,29 @@ export default function index({
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-80 sm:max-w-[44%]"
-            placeholder="Buscar..."
-            startContent={<SearchIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            variant="bordered"
-            radius="sm"
-            size="md"
-            labelPlacement="outside"
-            onValueChange={onSearchChange}
-          />
+        <div className={`flex gap-3 items-end ${isSearch ? 'justify-between': 'justify-between'}`}>
+          {isSearch && (
+            <Input
+              isClearable
+              className="w-80 sm:max-w-[44%]"
+              placeholder="Buscar..."
+              startContent={<SearchIcon />}
+              value={filterValue}
+              onClear={() => onClear()}
+              variant="bordered"
+              radius="sm"
+              size="md"
+              labelPlacement="outside"
+              onValueChange={onSearchChange}
+            />
+          )}
+          {
+            !isSearch && (
+              <div className="flex justify-center items-center">
+                <h1 className="text-2xl font-bold text-center mb-2">Reservas</h1>
+              </div>
+            )
+          }
           <div className="flex gap-3">
             {status && (
               <Dropdown>
@@ -426,7 +443,7 @@ export default function index({
               <Button
                 color="default"
                 className="bg-zinc-900 text-white"
-                endContent={btn === "Escanear Qr" ? <Qr/> : <PlusIcon />}
+                endContent={btn === "Escanear Qr" ? <Qr /> : <PlusIcon />}
                 onClick={() => {
                   btnLink !== "" ? router.push(btnLink) : "";
                 }}
@@ -549,7 +566,7 @@ export default function index({
         items={sortedItems}
       >
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item.idReserva ? item.idReserva : item.id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

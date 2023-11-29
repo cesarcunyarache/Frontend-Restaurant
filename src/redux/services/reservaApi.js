@@ -31,6 +31,18 @@ export const reservasApi = createApi({
       }),
       invalidatesTags: ["Reservas"],
     }),
+
+    getTotalReservas: builder.query({
+      query: () => "/reserva/total",
+    }),
+
+    getTotalRCC: builder.query({
+      query: () => "/reserva/totalRCC",
+    }),
+
+    getMesasOcupadas: builder.query({
+      query: () => "/reserva/totalRCC",
+    }),
   }),
 });
 
@@ -39,4 +51,7 @@ export const {
   useGetReservaByIdQuery,
   useGetMesasQuery,
   usePutUpdateReservaMutation,
+  useGetTotalReservasQuery,
+  useGetTotalRCCQuery,
+  useGetMesasOcupadasQuery,
 } = reservasApi;

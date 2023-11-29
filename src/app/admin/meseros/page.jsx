@@ -21,7 +21,7 @@ export default function page() {
     {name: "ID", uid: "id", sortable: true},
     {name: "Información Personal", uid: "infoMesero"},
     {name: "Nombres", uid: "nombres", sortable: true, search: true},
-    {name: "Número de documento", uid: "numeroD", sortable: true, search: true},
+    {name: "Número de documento", uid: "numeroDoc", sortable: true, search: true},
     {name: "Estado", uid: "estado", sortable: true},
     {name: "Accion", uid: "accionMesero"}, 
   ];

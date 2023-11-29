@@ -52,12 +52,8 @@ export const userApi = createApi({
       }),
     }),
 
-
-
-
-
     getProfile: builder.query({
-      query: () => "/clienteAuth/profile",
+      query: () => "/colaboradorAuth/profile/",
       providesTags: ["Profile"],
     }),
 
