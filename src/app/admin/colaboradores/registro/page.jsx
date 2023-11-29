@@ -30,7 +30,6 @@ const validateDocument = {
   },
   3: {
     length: 12,
-    length: 0,
     lengthMessage: "Este campo debe tener maximo 12 caracteres",
     pattern: /^[A-Za-z0-9]*$/,
     message: "Este campo debe contener solo caracteres alfanuméricos",

@@ -1,6 +1,7 @@
 "use client";
 
 import "./sidebar.css";
+
 import Close from "@/components/Icon/Close";
 import Menu from "@/components/Icon/Menu";
 import Home from "@/components/Icon/Home";
@@ -17,10 +18,10 @@ import Comentarios from "@/components/Icon/Comentarios";
 import Puntos from "@/components/Icon/Puntos";
 import Qr from "@/components/Icon/Qr";
 import Link from "next/link";
-import Users from '@/components/Icon/Users'
-import Customers from '@/components/Icon/Customers'
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import Users from "@/components/Icon/Users";
+import Customers from "@/components/Icon/Customers";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter} from "next/navigation";
 import { Button, Avatar } from "@nextui-org/react";
 import {
   Dropdown,
@@ -30,16 +31,36 @@ import {
   cn,
 } from "@nextui-org/react";
 
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  Button as Botton,
+  useDisclosure,
+} from "@nextui-org/react";
+
+
+import { QrReader } from "react-qr-reader";
+
+
 import { usePostLogoutMutation } from "@/redux/services/userApi";
 
-export default function SideBar() {
-  const [ postLogout ] = usePostLogoutMutation();
-  const pathname = usePathname();
 
-  const ruta = pathname.split('/');
+export default function SideBar() {
+  const [postLogout] = usePostLogoutMutation();
+  const pathname = usePathname();
+  const router = useRouter();
+  const ruta = pathname.split("/");
   const [expanded, setExpanded] = useState(false);
   const [active, setActive] = useState(false);
- 
+
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+
+  const [hasReadCode, setHasReadCode] = useState(false);
+
+  const [data, setData] = useState("");
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -62,42 +83,73 @@ export default function SideBar() {
     {
       title: "Clientes",
       path: "/admin/clientes",
-      icon: <Customers/>,
+      icon: <Customers />,
     },
 
     {
       title: "Mesas",
       path: "/admin/mesas",
-      icon: <Mesas/>,
+      icon: <Mesas />,
     },
     {
       title: "Meseros",
       path: "/admin/meseros",
-      icon: <Mesero/>,
+      icon: <Mesero />,
     },
 
     {
       title: "Cuentas de Clientes",
       path: "/admin/cuentasClientes",
-      icon: <Acount/>,
+      icon: <Acount />,
     },
     {
       title: "Comentarios",
       path: "/admin/comentarios",
-      icon: <Comentarios/>,
+      icon: <Comentarios />,
     },
     {
       title: "Puntos",
       path: "/admin/puntos",
-      icon: <Puntos/>,
+      icon: <Puntos />,
     },
   ];
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [backdrop, setBackdrop] = useState("blur");
+  const [isModal, setIsModal] = useState(false);
+
+  const handleOpen = (backdrop) => {
+    onOpen();
+  };
   const handeLogout = async () => {
     const response = await postLogout();
     console.log(response);
-    window.location.href = "/"
-  }
+    window.location.href = "/";
+  };
+
+  useEffect(() => {
+
+    /* const scanner = new Html5QrcodeScanner('reader', {
+      qrbox: {
+        width: 250,
+        height: 250,
+      },
+       fps: 5
+    })
+  
+    scanner.render(success, error);
+  
+  
+    function success(result){
+      scanner.clear();
+      setScanResult(result);
+    }
+  
+    function error(error){
+         console.log(error) 
+    }
+ */
+  }, []) 
 
   return (
     <>
@@ -148,8 +200,9 @@ export default function SideBar() {
                   h-12 rounded-xl text-zinc-500
                   hover:text-zinc-950
                   hover:bg-gray-100 ${
-
-                    `/${ruta[1]}${ruta[2] !== undefined ? `/${ruta[2]}` : ''}` === link.path 
+                    `/${ruta[1]}${
+                      ruta[2] !== undefined ? `/${ruta[2]}` : ""
+                    }` === link.path
                       ? "bg-gray-100 text-zinc-950 font-semibold"
                       : ""
                   }`}
@@ -223,7 +276,15 @@ export default function SideBar() {
                 <DropdownItem key="editar" startContent={<Edit />}>
                   Editar
                 </DropdownItem>
-                <DropdownItem key="qr" showDivider startContent={<Qr />}>
+                <DropdownItem
+                  key="qr"
+                  showDivider
+                  startContent={<Qr />}
+                  onClick={() => {
+                    setIsCameraOpen(true)
+                    handleOpen();
+                  }}
+                >
                   Qr
                 </DropdownItem>
                 <DropdownItem
@@ -240,6 +301,60 @@ export default function SideBar() {
           </div>
         </div>
       </div>
+
+      <Modal
+        backdrop={backdrop}
+        isOpen={isOpen}
+        onClose={onClose}
+        placement="center"
+        scrollBehavior="inside"
+        size="3xl"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col text-center">
+                <h1 className="font-bold">Escanear Qr</h1>
+              </ModalHeader>
+              <ModalBody className="m-2 ">
+                <form>
+                  <div className="">
+                    {isCameraOpen && (
+                      <div className="max-w-xl p-2 border border-dashed rounded m-auto">
+                        <QrReader
+            
+                          onResult={(result, error) => {
+                            if (!!result) {
+                              setData(result?.text);
+                              
+                        
+                              if (data !== "") {
+                                  onClose();
+                                 router.push(`/admin/reservas/${data}`)
+                              }
+                              console.log(data)
+                              setIsCameraOpen(false);
+                              setHasReadCode(true);
+
+                            }
+
+                            if (!!error) {
+                              /*   console.info(error); */
+                            }
+                          }}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </form>
+              </ModalBody>
+
+              
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }

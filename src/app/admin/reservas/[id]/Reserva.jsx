@@ -5,10 +5,7 @@ import Button from "@/components/Form/Button";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Avatar } from "@nextui-org/react";
-import {
-  usePostCreateMeseroMutation,
-  usePutUpdateMeseroMutation,
-} from "@/redux/services/meseroApi";
+import { usePutUpdateReservaMutation } from "@/redux/services/reservaApi";
 import Select from "@/components/Form/Select";
 import Textarea from "@/components/Form/Textarea";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -26,28 +23,33 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import { User } from "@nextui-org/react";
-import { useGetReservaByIdQuery } from "@/redux/services/reservaApi";
-import { Html5QrcodeScanner } from "html5-qrcode";
 
-export default function page({
-  /* data = {}, */ isUpdate = false,
-  param = "",
-}) {
-  /* const { idMesero, nombres, apellidos, estado, imagen } = data?.data ?? {
-    idMesero: "",
-    nombres: "",
-    apellidos: "",
-    estado: "",
-    imagen: "",
-  }; */
+
+export default function Reserva({ data = {}, param = "", isUpdate = false }) {
+  const {
+    idReserva,
+    numeroDoc,
+    nombres,
+    apellidos,
+    fecha,
+    hora,
+    cantComensales,
+    idMesero,
+    mesero,
+    comentario,
+    mesas,
+    estado,
+  } = data?.data ?? {
+    numeroDoc: "",
+    mesas: [],
+    mesero: {}
+  };
+
+
 
   const router = useRouter();
-
-  const [postCreateMesero, { isLoading: isLoadingCreate }] =
-    usePostCreateMeseroMutation();
-
-  const [putUpdateMesero, { isLoading: isLoadingUpdate }] =
-    usePutUpdateMeseroMutation();
+  const [putUpdateReserva, { isLoading: isLoadingUpdate }] =
+    usePutUpdateReservaMutation();
 
   const [idColaborador, setIdColaborador] = useState(param);
   const [lastClickedButton, setLastClickedButton] = useState("");
@@ -95,14 +97,9 @@ export default function page({
 
   const onSubmitUpdate = handleSubmit(async (data) => {
     try {
-      if (idMesero !== null && idMesero !== "") {
-        console.log({ ...data, idMesero });
-        const formData = new FormData();
-        formData.append("idMesero", idMesero);
-        formData.append("estado", data.estado);
-        formData.append("imagen", data.imagen[0]);
-
-        const response = await putUpdateMesero(formData);
+      if (idReserva !== null && idReserva !== "") {
+        console.log({idReserva: idReserva, ...data})
+        const response = await putUpdateReserva({idReserva: idReserva, ...data});
         if (response?.error) {
           console.log(response?.error);
           toast.error(response?.error?.data?.message);
@@ -120,146 +117,28 @@ export default function page({
     }
   });
 
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
-  let scannerRef = useRef();
-
-  const [hasReadCode, setHasReadCode] = useState(false);
-
-
-  const [data, setData] = useState("");
-
- /* s */
-
-    /*   const  { data : reserva, isLoading } = useGetReservaByIdQuery(data);
-     */
-    /*  console.log(reserva); */
-
-/*   const fetchData = async () => {
-      setIsCameraOpen(false);
-      if (data !== "") {
-        setIsCameraOpen(false); */
-
-        const { data: reserva, isLoading } =  useGetReservaByIdQuery(
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDExMTU5MjQsImRhdGEiOnsidG9rZW5SZXNlcnZhIjoiNzIifX0.XTlTh-cLBU2MBmWqmvk1_7RsEkDx4Mc5mGRVNlvf3RM"
-        );
-
-        console.log(reserva);
-    /*   }
-    };
-
-    fetchData(); 
-  } */
-
-
-
- /*  useEffect(() => {
-
-    const scanner = new Html5QrcodeScanner('reader', {
-      qrbox: {
-        width: 250,
-        height: 250,
-      },
-       fps: 5
-    })
-  
-    scanner.render(success, error);
-  
-  
-    function success(result){
-      scanner.clear();
-      setScanResult(result);
-    }
-  
-    function error(error){
-       /*  console.log(error) 
-    }
-
-  }, []) */
-
-
- 
-
   return (
     <div className="p-4">
       <Breadcrumbs
-        data={
-          isUpdate
-            ? [
-                {
-                  value: "Reservas",
-                  href: "/admin/reservas",
-                },
-                {
-                  value: nombres,
-                  href: `/admin/reservas/${param}/editar`,
-                },
-                {
-                  value: "Edit",
-                  href: `/admin/reservas/${param}/editar`,
-                },
-              ]
-            : [
-                {
-                  value: "Reservas",
-                  href: "/admin/reservas",
-                },
-                {
-                  value: "Detalle",
-                  href: "/admin/meseros/registro",
-                },
-              ]
-        }
+        data={[
+          {
+            value: "Reservas",
+            href: "/admin/reservas",
+          },
+          {
+            value: "Detalle",
+            href: "/admin/meseros/registro",
+          },
+        ]}
         title={"Reservas"}
       />
       <form
-        onSubmit={isUpdate ? onSubmitUpdate : onSubmitDefault}
+        onSubmit={onSubmitUpdate}
         className="  max-w-4xl mt-4"
         noValidate
         encType="multipart/form-data"
       >
         <div className="p-4 border  rounded-lg bg-white">
-          <div className="  max-w-xl">
-            <div className="flex justify-center max-w-4xl">
-              <Button
-                className="w-50"
-                startContent={<Qr />}
-                onClick={() => {
-                  if (isCameraOpen) {
-                    setIsCameraOpen(false);
-                  } else {
-                    setIsCameraOpen(true);
-                  }
-                }}
-              >
-                {isCameraOpen ? "Ocultar" : "Escanear QR"}
-              </Button>
-            </div>
-
-            {isCameraOpen && (
-              <div className="max-w-xl p-2 border border-dashed rounded">
-                <QrReader
-                  ref={scannerRef}
-                  onResult={(result, error) => {
-                    if (!!result && !hasReadCode) {
-                      
-                      
-                      setData(result?.text);
-                      setIsCameraOpen(false);
-                      setHasReadCode(true);
-                    
-                    }
-
-                    if (!!error) {
-                    /*   console.info(error); */
-                    }
-                  }}
-                  style={{ width: "100%" }}
-                />
-              </div>
-            )}
-          </div>
-
-
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3"></div>
           </div>
@@ -270,8 +149,7 @@ export default function page({
                 label="Número de Documento"
                 placeholder=" "
                 name="numeroDoc"
-                value="12321"
-                isDisabled
+                value={numeroDoc}
               />
             </div>
           </div>
@@ -282,8 +160,7 @@ export default function page({
                 label="Nombres"
                 placeholder=" "
                 name="nombres"
-                isDisabled
-                value="Cesar Efrain"
+                value={nombres}
               />
             </div>
 
@@ -292,8 +169,7 @@ export default function page({
                 label="Apellidos"
                 placeholder=" "
                 name="apellidos"
-                value="Cunyarache Castillo"
-                isDisabled
+                value={apellidos}
               />
             </div>
           </div>
@@ -312,7 +188,7 @@ export default function page({
                   type="date"
                   placeholder=" "
                   name="telefono"
-                  isDisabled
+                  value={fecha}
                 />
               </div>
               <div className="sm:col-span-3">
@@ -321,7 +197,7 @@ export default function page({
                   type="text"
                   placeholder=" "
                   name=""
-                  isDisabled
+                  value={hora}
                 />
               </div>
             </div>
@@ -333,39 +209,40 @@ export default function page({
                   type="text"
                   placeholder=" "
                   name=""
-                  isDisabled
+                  value={cantComensales}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
-              <div className="sm:col-span-3">
-                <label className="flex text-sm  leading-6 text-foreground-500 mb-2">
-                  Mesero
-                </label>
-                <User
-                  className="border flex justify-start w-full h-16 border-dashed"
-                  avatarProps={{
-                    radius: "full",
-                    isBordered: true,
-                    className: "mr-2 ml-2",
-                    src: "http://localhost/api/public/Images/65612c1cb7b001.43890015_pmenfhjlgoqik.png",
-                    name: "cesar",
-                  }}
-                  description={"121221"}
-                  name={"cesar efrain"}
-                >
-                  {"1213233"}
-                </User>
+            {idMesero && (
+              <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
+                <div className="sm:col-span-3">
+                  <label className="flex text-sm  leading-6 text-foreground-500 mb-2">
+                    Mesero
+                  </label>
+                  <User
+                    className="border flex justify-start w-full h-16 border-dashed"
+                    avatarProps={{
+                      radius: "full",
+                      isBordered: true,
+                      className: "mr-2 ml-2",
+                      src: mesero.imagen,
+                      name: mesero.nombres,
+                    }}
+                    description={mesero.numeroDoc}
+                    name={mesero.nombres}
+                  >
+                    {"1213233"}
+                  </User>
+                </div>
               </div>
-            </div>
-
+            )}
             <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <Textarea
-                  /*  defaultValue={comentario} */
                   label="Comentario"
                   name="Comentario"
+                  value={comentario}
                 />
               </div>
             </div>
@@ -388,11 +265,15 @@ export default function page({
                     <TableColumn>Nivel</TableColumn>
                   </TableHeader>
                   <TableBody>
-                    <TableRow key="1">
-                      <TableCell>T2</TableCell>
-                      <TableCell>6</TableCell>
-                      <TableCell>Terraza</TableCell>
-                    </TableRow>
+                    {mesas.map((mesa) => {
+                      return (
+                        <TableRow key={mesa.idMesa}>
+                          <TableCell>{mesa.codigo}</TableCell>
+                          <TableCell>{mesa.capacidad}</TableCell>
+                          <TableCell>{mesa.nivel}</TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </div>
@@ -410,14 +291,17 @@ export default function page({
             <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <Select
-                  placeholder="Seleccione el rol"
+                  placeholder="Seleccione el estado"
                   label="Estado"
                   data={[
-                    { key: 0, value: "Inhabilitado" },
-                    { key: 1, value: "Habilitado" },
+                    { key: 0, value: "Cancelada" },
+                    { key: 1, value: "Pendiente" },
+                    { key: 2, value: "Asistió" },
+                    { key: 3, value: "No presentado" },
+                    { key: 4, value: "Completada" },
                   ]}
                   name="estado"
-                  defaultSelectedKeys={["1"]}
+                  defaultSelectedKeys={[estado]}
                   register={register}
                   options={{
                     validate: (value) => {
@@ -438,52 +322,20 @@ export default function page({
 
         <div className="col-span-full">
           <div className="sm:col-span-3 flex flex-column gap-2 ">
-            {isUpdate ? (
-              <Button
-                isLoading={isLoadingUpdate}
-                type="submit"
-                className="bg-neutral-900 text-white  w-48 my-4"
-              >
-                Actualizar
-              </Button>
-            ) : (
-              <>
-                <Button
-                  isLoading={isLoadingCreate && lastClickedButton === "crear"}
-                  type="submit"
-                  className="bg-neutral-900 text-white  w-10 my-4"
-                  onClick={() => setLastClickedButton("crear")}
-                >
-                  Crear
-                </Button>
+            <Button
+              isLoading={isLoadingUpdate}
+              type="submit"
+              className="bg-neutral-900 text-white  w-40 my-4"
+            >
+              Actualizar Estado
+            </Button>
 
-                <Button
-                  type="submit"
-                  isLoading={
-                    isLoadingCreate && lastClickedButton === "crearOtro"
-                  }
-                  className="bg-zinc-50 border-2 text-black w-50 my-4"
-                  onClick={() => setLastClickedButton("crearOtro")}
-                >
-                  Crear y Crear otro
-                </Button>
-
-                <Button
-                  className="bg-zinc-50 border-2 text-black w-10 my-4"
-                  onClick={() => {
-                    if (isCameraOpen) {
-                      setIsCameraOpen(false);
-                    } else {
-                      setIsCameraOpen(true);
-                    }
-
-                    /*  router.back() */
-                  }}
-                >
-                  Cancelar
-                </Button>
-              </>
-            )}
+            <Button
+              className="bg-zinc-50 border-2 text-black w-10 my-4"
+              onClick={() => router.back()}
+            >
+              Cancelar
+            </Button>
           </div>
         </div>
       </form>

@@ -45,6 +45,7 @@ const statusOptions = [
   { name: "Active", uid: "active" },
   { name: "Paused", uid: "paused" },
   { name: "Vacation", uid: "vacation" },
+  { name: "danger", uid: "Cancelada" }
 ];
 
 const statusColorMap = {
@@ -66,6 +67,7 @@ export default function index({
   btnLink = "",
   status = false,
   isActiveBtn = false,
+
 }) {
   const router = useRouter();
   const users = !isLoading ? data : [];

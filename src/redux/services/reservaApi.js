@@ -7,18 +7,36 @@ export const reservasApi = createApi({
     baseUrl: process.env.NEXT_PUBLIC_API,
     credentials: "include",
   }),
-  tagTypes: ["Reserva"],
+  tagTypes: ["Reservas"],
   endpoints: (builder) => ({
     getReservas: builder.query({
       query: () => "/reserva/",
+      providesTags: ["Reservas"],
+    }),
+
+    getMesas: builder.query({
+      query: () => "/reserva/mesas",
     }),
 
     getReservaById: builder.query({
-      query: (id) => ({ url: `reserva/${id}` }),
+      query: (id) => ({ url: `reserva/id/${id}` }),
+    }),
+
+    putUpdateReserva: builder.mutation({
+      query: (data) => ({
+        url: "reserva/update",
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Reservas"],
     }),
   }),
 });
 
-
-
-export const { useGetReservasQuery, useGetReservaByIdQuery } = reservasApi;
+export const {
+  useGetReservasQuery,
+  useGetReservaByIdQuery,
+  useGetMesasQuery,
+  usePutUpdateReservaMutation,
+} = reservasApi;
