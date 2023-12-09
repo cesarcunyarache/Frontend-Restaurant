@@ -28,7 +28,7 @@ import {
 import { User } from "@nextui-org/react";
 import { useGetReservaByIdQuery } from "@/redux/services/reservaApi";
 
-export default function page({
+export default function Page({
   /* data = {}, */ isUpdate = false,
   param = "",
 }) {

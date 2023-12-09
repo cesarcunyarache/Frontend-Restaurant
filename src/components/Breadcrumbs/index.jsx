@@ -2,7 +2,7 @@ import React from "react";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-export default function index({data = [], title}) {
+export default function Index({data = [], title}) {
   const router = useRouter();
   const handelOnClic = (href) => {
     router.push(href);

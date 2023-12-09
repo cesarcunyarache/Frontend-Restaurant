@@ -6,36 +6,37 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Avatar } from "@nextui-org/react";
 import {
-  usePostCreateMeseroMutation,
-  usePutUpdateMeseroMutation,
-} from "@/redux/services/meseroApi";
+  usePostCreateProductoMutation,
+  usePutUpdateProductoMutation,
+} from "@/redux/services/productoApi";
 import Select from "@/components/Form/Select";
 import Textarea from "@/components/Form/Textarea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
 import Autocomplete from "@/components/Autocomplete";
-import { useGetColaboradoresNoMeserosQuery } from "@/redux/services/meseroApi";
 
 export default function Page({ data = {}, isUpdate = false, param = "" }) {
-  const { idMesero, nombres, apellidos, estado, imagen } = data?.data ?? {
-    idMesero: "",
-    nombres: "",
-    apellidos: "",
+  const {  nombre, precio, estado, imagen, costoPuntos } = data?.data ?? {
+
+    nombre: "",
+    precio: "",
     estado: "",
     imagen: "",
+    costoPuntos:""
   };
+
+  
 
   const router = useRouter();
 
-  const [postCreateMesero, { isLoading: isLoadingCreate }] =
-    usePostCreateMeseroMutation();
+  const [postCreateProducto, { isLoading: isLoadingCreate }] =
+    usePostCreateProductoMutation();
 
-  const { data: colab, isLoading } = useGetColaboradoresNoMeserosQuery();
 
-  const [putUpdateMesero, { isLoading: isLoadingUpdate }] =
-    usePutUpdateMeseroMutation();
+  const [putUpdateProducto, { isLoading: isLoadingUpdate }] =
+    usePutUpdateProductoMutation();
 
-  const [idColaborador, setIdColaborador] = useState(param);
+  const [idProducto, setIdProducto] = useState(param);
   const [lastClickedButton, setLastClickedButton] = useState("");
 
   const {
@@ -50,29 +51,27 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmitDefault = handleSubmit(async (data) => {
     try {
-      if (idColaborador !== null && idColaborador !== "") {
-        console.log(data);
+      console.log(data);
 
-        const formData = new FormData();
-        formData.append("idColaborador", idColaborador);
-        formData.append("estado", data.estado);
-        formData.append("imagen", data.imagen[0]);
+      const formData = new FormData();
+      formData.append("nombre", data.nombre);
+      formData.append("precio", parseFloat(data.precio));
+      formData.append("costoPuntos", parseInt(data.costoPuntos));
+      formData.append("estado", data.estado);
+      formData.append("imagen", data.imagen[0]);
 
-        const response = await postCreateMesero(formData);
-        if (response?.error) {
-          console.log(response?.error);
-          toast.error(response?.error?.data?.message);
+      const response = await postCreateProducto(formData);
+      if (response?.error) {
+        console.log(response?.error);
+        toast.error(response?.error?.data?.message);
+      }
+      if (response?.data) {
+        toast.success(response?.data?.message);
+        if (lastClickedButton === "crear") {
+          router.push("/admin/productos");
+        } else if (lastClickedButton === "crearOtro") {
+          reset();
         }
-        if (response?.data) {
-          toast.success(response?.data?.message);
-          if (lastClickedButton === "crear") {
-            router.push("/admin/meseros");
-          } else if (lastClickedButton === "crearOtro") {
-            reset();
-          }
-        }
-      } else {
-        toast.error("Seleccione un colaborador");
       }
     } catch (error) {
       console.error(error);
@@ -81,25 +80,24 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmitUpdate = handleSubmit(async (data) => {
     try {
-      if (idMesero !== null && idMesero !== "") {
-        console.log({ ...data, idMesero });
-        const formData = new FormData();
-        formData.append("idMesero", idMesero);
-        formData.append("estado", data.estado);
-        formData.append("imagen", data.imagen[0]);
+      console.log({ ...data, idProducto });
+      const formData = new FormData();
+      formData.append("idProducto", parseInt(idProducto));
+      formData.append("nombre", data.nombre);
+      formData.append("precio", parseFloat(data.precio));
+      formData.append("costoPuntos", parseInt(data.costoPuntos));
+      formData.append("estado", parseInt(data.estado));
+      formData.append("imagen", data.imagen[0]);
 
-        const response = await putUpdateMesero(formData);
-        if (response?.error) {
-          console.log(response?.error);
-          toast.error(response?.error?.data?.message);
-        }
-        if (response?.data) {
-          toast.success(response?.data?.message);
+      const response = await putUpdateProducto(formData);
+      if (response?.error) {
+        console.log(response?.error);
+        toast.error(response?.error?.data?.message);
+      }
+      if (response?.data) {
+        toast.success(response?.data?.message);
 
-          router.push("/admin/meseros");
-        }
-      } else {
-        toast.error("Seleccione un colaborador");
+        router.push("/admin/productos");
       }
     } catch (error) {
       console.error(error);
@@ -113,30 +111,30 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
           isUpdate
             ? [
                 {
-                  value: "Meseros",
-                  href: "/admin/meseros",
+                  value: "Productos",
+                  href: "/admin/productos",
                 },
                 {
-                  value: nombres,
-                  href: `/admin/meseros/${param}/editar`,
+                  value: nombre,
+                  href: `/admin/productos/${param}/editar`,
                 },
                 {
                   value: "Edit",
-                  href: `/admin/meseros/${param}/editar`,
+                  href: `/admin/productos/${param}/editar`,
                 },
               ]
             : [
                 {
-                  value: "Meseros",
-                  href: "/admin/meseros",
+                  value: "Productos",
+                  href: "/admin/productos",
                 },
                 {
                   value: "Crear",
-                  href: "/admin/meseros/registro",
+                  href: "/admin/productos/registro",
                 },
               ]
         }
-        title={"Meseros"}
+        title={"Productos"}
       />
       <form
         onSubmit={isUpdate ? onSubmitUpdate : onSubmitDefault}
@@ -155,41 +153,106 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                   className="mt-2 mb-4"
                   isBordered
                   src={imagen}
-                  name={nombres}
+                  name={nombre}
                   size="md"
                 />
               </div>
             </div>
           )}
 
-          {!isUpdate && (
-            <div className="mt-5 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
-              <div className="sm:col-span-3">
-                <Autocomplete
-                  data={isLoading ? [] : colab?.data}
-                  name="idColaborador"
-                  register={register}
-                  defaultSelectedKey={idColaborador}
-                  onSelectionChange={(value) => {
-                    setIdColaborador(value);
-                  }}
-                  options={{
-                    validate: (value) => {
-                      if (value === "") {
-                        return "Este campo es requerido";
-                      }
-                    },
-                  }}
-                 /*  color={idColaborador === null && "danger"}
-                  isInvalid={idColaborador === null && true} */
-                  /* errorMessage={
-                    idColaborador === null && "Este campo es requerido"
-                  } */
-                  isRequired
-                />
-              </div>
+          <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
+            <div className="sm:col-span-3">
+              <Input
+                label="Nombre del Producto"
+                placeholder=" "
+                name="nombre"
+                defaultValue={nombre}
+                /* onKeyDown={(e) => {
+                  if (
+                    e.keyCode !== 32 &&
+                    e.keyCode !== 8 &&
+                    (e.keyCode < 65 || e.keyCode > 90)
+                  ) {
+                    e.preventDefault();
+                  }
+                }} */
+                register={register}
+                options={{
+                  required: {
+                    value: true,
+                    message: "Este campo es requerido",
+                  },
+                }}
+                color={errors.nombre && "danger"}
+                isInvalid={errors.nombre ? true : false}
+                errorMessage={errors.nombre && errors.nombre.message}
+                isRequired
+              />
             </div>
-          )}
+          </div>
+
+          <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
+            <div className="sm:col-span-3">
+              <Input
+                label="Precio"
+                placeholder=" "
+                name="precio"
+                defaultValue={precio} 
+                type="text"
+
+       
+                register={register}
+                options={{
+                  required: {
+                    value: true,
+                    message: "Este campo es requerido",
+                  },
+                  pattern: {
+                    value: /^\d*\.?\d*$/,
+                    message: "Solo se permiten numero"
+                  }
+                }}
+              
+                color={errors.precio && "danger"}
+                isInvalid={errors.precio ? true : false}
+                errorMessage={errors.precio && errors.precio.message}
+                isRequired
+              />
+            </div>
+          </div>
+
+          <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
+            <div className="sm:col-span-3">
+              <Input
+                label="Costo en Puntos"
+                placeholder=" "
+                name="costoPuntos"
+                 defaultValue={costoPuntos} 
+                type="number"
+                register={register}
+                options={{
+                  required: {
+                    value: true,
+                    message: "Este campo es requerido",
+                  },
+                }}
+                onKeyDown={(e) => {
+                  if (
+                    e.keyCode !== 8 &&
+                    e.keyCode !== 32 &&
+          
+                    (e.keyCode < 48 || e.keyCode > 57 || e.keyCode === 229)
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+                color={errors.costoPuntos && "danger"}
+                isInvalid={errors.costoPuntos ? true : false}
+                errorMessage={errors.costoPuntos && errors.costoPuntos.message}
+                isRequired
+              />
+            </div>
+          </div>
 
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
@@ -204,6 +267,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 className=" mt-1 flex w-full  rounded-md  border-gray-300 border-2 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-zinc-900 file:h-8 file:text-white file:text-sm file:font-medium"
                 type="file"
                 id="picture"
+                
                 accept="image/*"
                 {...register("imagen", {
                   validate: (value) => {
@@ -226,7 +290,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                   { key: 1, value: "Habilitado" },
                 ]}
                 name="estado"
-                defaultSelectedKeys={["1"]}
+                defaultSelectedKeys={[estado.toString()]}
                 register={register}
                 options={{
                   validate: (value) => {

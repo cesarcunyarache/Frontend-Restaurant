@@ -58,7 +58,7 @@ const validateDocument = {
   },
 };
 
-export default function page({ data = {}, isUpdate = false, param = "" }) {
+export default function Page({ data = {}, isUpdate = false, param = "" }) {
   const {
     idTipoDoc,
     numeroDoc,

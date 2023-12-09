@@ -1,7 +1,7 @@
 import React from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 
-export default function index() {
+export default function Index() {
   const {isOpen, onOpen, onClose} = useDisclosure();
   const [backdrop, setBackdrop] = React.useState('blur')
 

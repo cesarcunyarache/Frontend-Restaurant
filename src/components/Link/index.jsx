@@ -3,7 +3,7 @@
 import { Link } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-export default function index ({ children, ...props }) {
+export default function Index ({ children, ...props }) {
   const router = useRouter();
   return (
     <Link

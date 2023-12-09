@@ -7,8 +7,7 @@ export default function Reservation_Final() {
     <form className="border rounded-lg bg-white p-6 ">
       <div className="elegirMesero pt-4">
         <h2 className="text-[18px] font-bold pb-2 pl-8 pr-4 m-auto">
-          "En nuestro restaurante, te damos el control. Elije a tu mesero o
-          mesera favorito/a y disfruta de un servicio a medida."
+          {"En nuestro restaurante, te damos el control. Elije a tu mesero o mesera favorito/a y disfruta de un servicio a medida."}
         </h2>
         <div className="contenido flex flex-row">
           <div className="ladoIzquiero flex flex-row">

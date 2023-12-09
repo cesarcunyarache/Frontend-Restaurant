@@ -43,7 +43,12 @@ const validateDocument = {
   },
 };
 
-export default function page({ data = {}, isUpdate = false, param = "" }) {
+export default function Page({
+  data = {},
+  isUpdate = false,
+  param = "",
+  isEditProfile = false,
+}) {
   const {
     idTipoDoc,
     numeroDoc,
@@ -108,7 +113,9 @@ export default function page({ data = {}, isUpdate = false, param = "" }) {
         toast.error(response?.error?.data?.message);
       }
       if (response.data) {
-        router.push("/admin/colaboradores");
+        if (!isEditProfile) {
+          router.push("/admin/colaboradores");
+        }
         toast.success(response?.data?.message);
       }
     } catch (error) {
@@ -117,37 +124,39 @@ export default function page({ data = {}, isUpdate = false, param = "" }) {
   });
 
   return (
-    <div className="p-4">
-      <Breadcrumbs
-        data={
-          isUpdate
-            ? [
-                {
-                  value: "Colaboradores",
-                  href: "/admin/colaboradores",
-                },
-                {
-                  value: nombres,
-                  href: `/admin/colaboradores/${param}/editar`,
-                },
-                {
-                  value: "Edit",
-                  href: `/admin/colaboradores/${param}/editar`,
-                },
-              ]
-            : [
-                {
-                  value: "Colaboradores",
-                  href: "/admin/colaboradores",
-                },
-                {
-                  value: "Crear",
-                  href: "/admin/colaboradores/registro",
-                },
-              ]
-        }
-        title={"Colaboradores"}
-      />
+    <div className={`p-4 ${isEditProfile && "pt-0"}`}>
+      {!isEditProfile && (
+        <Breadcrumbs
+          data={
+            isUpdate
+              ? [
+                  {
+                    value: "Colaboradores",
+                    href: "/admin/colaboradores",
+                  },
+                  {
+                    value: nombres,
+                    href: `/admin/colaboradores/${param}/editar`,
+                  },
+                  {
+                    value: "Edit",
+                    href: `/admin/colaboradores/${param}/editar`,
+                  },
+                ]
+              : [
+                  {
+                    value: "Colaboradores",
+                    href: "/admin/colaboradores",
+                  },
+                  {
+                    value: "Crear",
+                    href: "/admin/colaboradores/registro",
+                  },
+                ]
+          }
+          title={"Colaboradores"}
+        />
+      )}
       <form
         onSubmit={isUpdate ? onSubmitUpdate : onSubmitDefault}
         className="  max-w-4xl mt-4"
@@ -295,6 +304,7 @@ export default function page({ data = {}, isUpdate = false, param = "" }) {
                 name="fechaNacimiento"
                 defaultValue={fechaNacimiento}
                 register={register}
+                
                 options={{
                   required: {
                     value: true,
@@ -385,12 +395,12 @@ export default function page({ data = {}, isUpdate = false, param = "" }) {
 
                     minLength: {
                       value: 9,
-                      message: "Este campo debe tener 9 caracteres"
+                      message: "Este campo debe tener 9 caracteres",
                     },
                     maxLength: {
                       value: 9,
-                      message: "Este campo debe tener 9 caracteres"
-                    }
+                      message: "Este campo debe tener 9 caracteres",
+                    },
                   }}
                   color={errors.telefono && "danger"}
                   isInvalid={errors.telefono ? true : false}

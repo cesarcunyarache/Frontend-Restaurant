@@ -49,6 +49,11 @@ const statusOptions = [
   { name: "Completada", uid: "4" },
 ];
 
+const statusOptionsProducto = [
+  { name: "Inhabilidado", uid: "0" },
+  { name: "Habilitado", uid: "1" },
+];
+
 const statusColorMap = {
   0: { estado: "danger", text: "Cancelada" },
   1: { estado: "warning", text: "Pendiente" },
@@ -57,9 +62,14 @@ const statusColorMap = {
   4: { estado: "success", text: "Completada" },
 };
 
+const statusColorMapProducto = {
+  0: { estado: "danger", text: "Inhabilidado" },
+  1: { estado: "success", text: "Habilitado" },
+};
+
 /* const inicialVisibleColumns = ["id","nombres", "apellidos", "telefono", "fechaNacimiento", "acciones"];
  */
-export default function index({
+export default function Index({
   inicialVisibleColumns = [],
   columns = [],
   isLoading,
@@ -69,6 +79,8 @@ export default function index({
   status = false,
   isActiveBtn = false,
   isSearch = true,
+  statusProductos = false,
+  statusMeseros = false,
 }) {
   const router = useRouter();
   const users = !isLoading ? data : [];
@@ -198,6 +210,24 @@ export default function index({
           </User>
         );
 
+      case "infoProducto":
+        return (
+          <User
+            avatarProps={{
+              radius: "sm",
+              isBordered: true,
+              className: "mr-2",
+              src: user.imagen,
+              name: user.nombre,
+            }}
+            description={"S/" + user.precio}
+            name={user.nombre}
+          >
+            {"S/"}
+            {user.precio}
+          </User>
+        );
+
       case "role":
         return (
           <div className="flex flex-col">
@@ -216,6 +246,31 @@ export default function index({
             variant="flat"
           >
             {statusColorMap[user.estado].text}
+          </Chip>
+        );
+
+      case "estadoProducto":
+        return (
+          <Chip
+            className="capitalize"
+            color={statusColorMapProducto[user.estado].estado}
+            size="sm"
+            variant="flat"
+          >
+            {statusColorMapProducto[user.estado].text}
+          </Chip>
+        );
+
+
+      case "estadoMesero":
+        return (
+          <Chip
+            className="capitalize"
+            color={statusColorMapProducto[user.estado].estado}
+            size="sm"
+            variant="flat"
+          >
+            {statusColorMapProducto[user.estado].text}
           </Chip>
         );
 
@@ -322,6 +377,24 @@ export default function index({
           </div>
         );
 
+      case "accionProducto":
+        return (
+          <div className="relative py-2 flex justify-start items-center gap-2">
+            <Button
+              color="default"
+              variant="bordered"
+              size="sm"
+              className="gap-0 border-hidden font-bold hover:underline"
+              startContent={<Edit />}
+              onClick={() => {
+                router.push(`/admin/productos/${user.idProducto}/editar`);
+              }}
+            >
+              Editar
+            </Button>
+          </div>
+        );
+
       default:
         return cellValue;
     }
@@ -363,7 +436,11 @@ export default function index({
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className={`flex gap-3 items-end ${isSearch ? 'justify-between': 'justify-between'}`}>
+        <div
+          className={`flex gap-3 items-end ${
+            isSearch ? "justify-between" : "justify-between"
+          }`}
+        >
           {isSearch && (
             <Input
               isClearable
@@ -379,13 +456,11 @@ export default function index({
               onValueChange={onSearchChange}
             />
           )}
-          {
-            !isSearch && (
-              <div className="flex justify-center items-center">
-                <h1 className="text-2xl font-bold text-center mb-2">Reservas</h1>
-              </div>
-            )
-          }
+          {!isSearch && (
+            <div className="flex justify-center items-center">
+              <h1 className="text-2xl font-bold text-center mb-2">Reservas</h1>
+            </div>
+          )}
           <div className="flex gap-3">
             {status && (
               <Dropdown>
@@ -406,6 +481,60 @@ export default function index({
                   onSelectionChange={setStatusFilter}
                 >
                   {statusOptions.map((status) => (
+                    <DropdownItem key={status.uid} className="capitalize">
+                      {capitalize(status.name)}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            )}
+
+            {statusProductos && (
+              <Dropdown>
+                <DropdownTrigger className="hidden sm:flex">
+                  <Button
+                    endContent={<ChevronDownIcon className="text-small" />}
+                    variant="flat"
+                  >
+                    Estado
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={statusFilter}
+                  selectionMode="multiple"
+                  onSelectionChange={setStatusFilter}
+                >
+                  {statusOptionsProducto.map((status) => (
+                    <DropdownItem key={status.uid} className="capitalize">
+                      {capitalize(status.name)}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            )}
+
+            {statusMeseros && (
+              <Dropdown>
+                <DropdownTrigger className="hidden sm:flex">
+                  <Button
+                    endContent={<ChevronDownIcon className="text-small" />}
+                    variant="flat"
+                  >
+                    Estado
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={statusFilter}
+                  selectionMode="multiple"
+                  onSelectionChange={setStatusFilter}
+                >
+                  {statusOptionsProducto.map((status) => (
                     <DropdownItem key={status.uid} className="capitalize">
                       {capitalize(status.name)}
                     </DropdownItem>
@@ -566,7 +695,15 @@ export default function index({
         items={sortedItems}
       >
         {(item) => (
-          <TableRow key={item.idReserva ? item.idReserva : item.id}>
+          <TableRow
+            key={
+              item.idReserva
+                ? item.idReserva
+                : item.id || item.idProducto
+                ? item.idProducto
+                : item.id
+            }
+          >
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

@@ -4,7 +4,7 @@ import { useGetUsuariosClientesQuery } from "@/redux/services/clienteApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
-export default function page() {
+export default function Page() {
   const { data, isLoading, isError, error } = useGetUsuariosClientesQuery();
 
   console.log(data);

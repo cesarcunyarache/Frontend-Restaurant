@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import Button from "@/components/Form/Button";
 import Table from "@/components/Table";
 import Mesas from '@/components/Mesas'
-export default function page() {
+export default function Page() {
    const { data, isLoading, isError, error } = useGetMesasQuery(); 
 
   const nivel = "2";
@@ -69,9 +69,9 @@ export default function page() {
                   />
                   <div className="">
                     {!isLoading &&
-                      data?.data?.map((mesa) => {
+                      data?.data?.map((mesa, index) => {
                         if (mesa.nivel == "S") {
-                          return <Mesas data={mesa} />;
+                          return <Mesas key={index} data={mesa} />;
                         }
                       })}
                   </div>
@@ -87,7 +87,7 @@ export default function page() {
                     {!isLoading &&
                       data?.data?.map((mesa, index) => {
                         if (mesa.nivel == "Terraza") {
-                          return <Mesas data={mesa} />;
+                          return <Mesas key={index} data={mesa} />;
                         }
                       })}
                   </div>

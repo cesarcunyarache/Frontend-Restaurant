@@ -4,7 +4,7 @@ import { useGetReservasQuery } from "@/redux/services/reservaApi";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Table from "@/components/Table";
 
-export default function page() {
+export default function Page() {
   const { data, isLoading, isError, error } = useGetReservasQuery();
 
 

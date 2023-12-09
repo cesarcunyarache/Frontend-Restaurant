@@ -4,7 +4,7 @@ import { useGetColaboradoresQuery } from "@/redux/services/colaboradorApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
-export default function page() {
+export default function Page() {
   const { data, isLoading, isError, error } = useGetColaboradoresQuery();
 
   const users = !isLoading ? data.data : [];

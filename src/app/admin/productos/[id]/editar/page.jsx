@@ -1,10 +1,10 @@
 "use client";
 import Load from "@/components/Load";
 import {useEffect, useState} from 'react'
-import Page from "@/app/admin/meseros/registro/page";
-import { useGetSearchByIdColaboradorQuery } from "@/redux/services/meseroApi";
+import Page from "@/app/admin/productos/registro/page";
+import { useGetSearchByIdProductoQuery } from "@/redux/services/productoApi";
 export default function PageEditMesero({ params }) {
-  const  { data, isLoading, refetch } = useGetSearchByIdColaboradorQuery(params?.id);
+  const  { data, isLoading, refetch } = useGetSearchByIdProductoQuery(params?.id);
 
   return (
     <div className="w-full h-full">

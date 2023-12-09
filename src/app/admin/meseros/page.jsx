@@ -4,7 +4,7 @@ import { useGetMeserosQuery } from "@/redux/services/meseroApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
-export default function page() {
+export default function Page() {
   const { data, isLoading, isError, error } = useGetMeserosQuery();
 
   const users = !isLoading ? data.data : [];
@@ -13,7 +13,7 @@ export default function page() {
   const inicialVisibleColumns = [
     "id",
     "infoMesero",
-    "estado", 
+    "estadoMesero", 
     "accionMesero",
   ];
 
@@ -22,7 +22,7 @@ export default function page() {
     {name: "Información Personal", uid: "infoMesero"},
     {name: "Nombres", uid: "nombres", sortable: true, search: true},
     {name: "Número de documento", uid: "numeroDoc", sortable: true, search: true},
-    {name: "Estado", uid: "estado", sortable: true},
+    {name: "Estado", uid: "estadoMesero", sortable: true},
     {name: "Accion", uid: "accionMesero"}, 
   ];
 
@@ -50,7 +50,7 @@ export default function page() {
           isActiveBtn={true}
           btn="Nuevo Mesero"
           btnLink="meseros/registro"
-          /* status={true} */
+          statusMeseros={true} 
         />
       </div>
     </div>

@@ -31,7 +31,7 @@ import Load from "@/components/Load";
 import Reserva from './Reserva'
 
 
-export default function page({ params }) {
+export default function Page({ params }) {
 
 
   const { data, isLoading, isError, error } = useGetReservaByIdQuery(params?.id);

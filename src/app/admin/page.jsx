@@ -34,91 +34,91 @@ import {
 
  const dataReserva = [
   {
-    fecha: "2023-12-10",
+    fecha: "2023-11-10",
     reservasTotales: 15,
     reservasConfirmadas: 12,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-11",
+    fecha: "2023-11-11",
     reservasTotales: 18,
     reservasConfirmadas: 15,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-12",
+    fecha: "2023-11-12",
     reservasTotales: 20,
     reservasConfirmadas: 16,
     reservasCanceladas: 4,
   },
   {
-    fecha: "2023-12-13",
+    fecha: "2023-11-13",
     reservasTotales: 22,
     reservasConfirmadas: 18,
     reservasCanceladas: 4,
   },
   {
-    fecha: "2023-12-14",
+    fecha: "2023-11-14",
     reservasTotales: 15,
     reservasConfirmadas: 12,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-15",
+    fecha: "2023-11-15",
     reservasTotales: 12,
     reservasConfirmadas: 10,
     reservasCanceladas: 2,
   },
   {
-    fecha: "2023-12-16",
+    fecha: "2023-11-16",
     reservasTotales: 18,
     reservasConfirmadas: 15,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-17",
+    fecha: "2023-11-17",
     reservasTotales: 15,
     reservasConfirmadas: 12,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-18",
+    fecha: "2023-11-18",
     reservasTotales: 12,
     reservasConfirmadas: 10,
     reservasCanceladas: 2,
   },
   {
-    fecha: "2023-12-19",
+    fecha: "2023-11-19",
     reservasTotales: 22,
     reservasConfirmadas: 18,
     reservasCanceladas: 4,
   },
   {
-    fecha: "2023-12-20",
+    fecha: "2023-11-20",
     reservasTotales: 15,
     reservasConfirmadas: 12,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-21",
+    fecha: "2023-11-21",
     reservasTotales: 12,
     reservasConfirmadas: 10,
     reservasCanceladas: 2,
   },
   {
-    fecha: "2023-12-22",
+    fecha: "2023-11-22",
     reservasTotales: 18,
     reservasConfirmadas: 15,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-23",
+    fecha: "2023-11-23",
     reservasTotales: 15,
     reservasConfirmadas: 12,
     reservasCanceladas: 3,
   },
   {
-    fecha: "2023-12-24",
+    fecha: "2023-11-24",
     reservasTotales: 12,
     reservasConfirmadas: 10,
     reservasCanceladas: 2,
@@ -158,63 +158,63 @@ import {
 
 const data = [
   {
-    fecha: "2023-12-10",
+    fecha: "2023-11-10",
     numeroMesas: 9
   },
   {
-    fecha: "2023-12-11",
+    fecha: "2023-11-11",
     numeroMesas: 3
   },
   {
-    fecha: "2023-12-12",
+    fecha: "2023-11-12",
     numeroMesas: 5
   },
   {
-    fecha: "2023-12-13",
+    fecha: "2023-11-13",
     numeroMesas: 10
   },
   {
-    fecha: "2023-12-14",
+    fecha: "2023-11-14",
     numeroMesas: 10
   },
   {
-    fecha: "2023-12-15",
+    fecha: "2023-11-15",
     numeroMesas: 13
   },
   {
-    fecha: "2023-12-16",
+    fecha: "2023-11-16",
     numeroMesas: 10
   },
   {
-    fecha: "2023-12-17",
+    fecha: "2023-11-17",
     numeroMesas: 5
   },
   {
-    fecha: "2023-12-18",
+    fecha: "2023-11-18",
     numeroMesas: 10
   },
   {
-    fecha: "2023-12-19",
+    fecha: "2023-11-19",
     numeroMesas: 5
   },
   {
-    fecha: "2023-12-20",
+    fecha: "2023-11-20",
     numeroMesas: 10
   },
   {
-    fecha: "2023-12-21",
+    fecha: "2023-11-21",
     numeroMesas: 7
   },
   {
-    fecha: "2023-12-22",
+    fecha: "2023-11-22",
     numeroMesas: 20
   },
   {
-    fecha: "2023-12-23",
+    fecha: "2023-11-23",
     numeroMesas: 10
   },
   {
-    fecha: "2023-12-24",
+    fecha: "2023-11-24",
     numeroMesas: 11
   },
 ]
@@ -222,16 +222,23 @@ const data = [
 
 import Customers from "@/components/Icon/Customers";
 
-export default function page() {
+export default function Page() {
   /*      const { data, isLoading, isError, error } = useGetTotalReservasQuery(); */
 
   const { data: totales, isLoading: isLoadingTotal} = useGetTotalRCCQuery();
+
+  const { data: totalReser, isLoading: isLoadingReser} = useGetTotalReservasQuery();
+
+ 
+
 
   /*      console.log(data)
 
 
   
   const users = !isLoading ? data.data : [];  */
+
+
 
   const { data: reservas, isLoading } = useGetReservasQuery();
 

@@ -4,7 +4,7 @@ import { useGetUsuariosQuery } from "@/redux/services/usuariosApi";
 import Breadcrumbs from '@/components/Breadcrumbs'
 import React from "react";
 import Table from "@/components/Table";
-export default function page() {
+export default function Page() {
   const { data, isLoading, isError, error } = useGetUsuariosQuery();
 
   const users = !isLoading ? data.data : [];

@@ -82,7 +82,7 @@ export default function Reserva({ data = {}, param = "", isUpdate = false }) {
         if (response?.data) {
           toast.success(response?.data?.message);
           if (lastClickedButton === "crear") {
-            router.push("/admin/meseros");
+            router.push("/admin/reservas");
           } else if (lastClickedButton === "crearOtro") {
             reset();
           }
@@ -107,7 +107,7 @@ export default function Reserva({ data = {}, param = "", isUpdate = false }) {
         if (response?.data) {
           toast.success(response?.data?.message);
 
-          router.push("/admin/meseros");
+          router.push("/admin/reservas");
         }
       } else {
         toast.error("Seleccione un colaborador");

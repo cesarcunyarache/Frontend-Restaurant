@@ -17,9 +17,11 @@ import Acount from "@/components/Icon/Acount";
 import Comentarios from "@/components/Icon/Comentarios";
 import Puntos from "@/components/Icon/Puntos";
 import Qr from "@/components/Icon/Qr";
+import Cuenta from "@/components/Icon/Cuenta";
 import Link from "next/link";
 import Users from "@/components/Icon/Users";
 import Customers from "@/components/Icon/Customers";
+import Productos from "@/components/Icon/Productos";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button, Avatar } from "@nextui-org/react";
@@ -48,6 +50,9 @@ import {
   useGetProfileQuery,
 } from "@/redux/services/userApi";
 
+import { useDispatch, useSelector } from "react-redux";
+import { update } from "@/redux/features/loadSlice";
+
 const selectRol = (rol) => {
   switch (rol) {
     case 1:
@@ -62,9 +67,17 @@ const selectRol = (rol) => {
 export default function SideBar() {
   const { data: profile, isLoading, isError, error } = useGetProfileQuery();
 
-  console.log(profile);
+   
+  const dispatch = useDispatch();
+
+/*   console.log(isLoading)
+  useEffect(() => {
+    dispatch(update(isLoading));
+
+  } ,[isLoading]) */
 
   if (isError) console.log(error);
+
   const [postLogout] = usePostLogoutMutation();
   const pathname = usePathname();
   const router = useRouter();
@@ -132,12 +145,19 @@ export default function SideBar() {
       title: "Comentarios",
       path: "/admin/comentarios",
       icon: <Comentarios />,
-    },
+    },*/
     {
+      title: "Productos",
+      path: "/admin/productos",
+      icon: <Productos />,
+      idRol: 2
+    },
+    /* {
       title: "Puntos",
       path: "/admin/puntos",
       icon: <Puntos />,
-    }, */
+      idRol: 3
+    },  */
   ];
 
   const handeLogout = async () => {
@@ -145,29 +165,6 @@ export default function SideBar() {
     console.log(response);
     window.location.href = "/";
   };
-
-  useEffect(() => {
-    /* const scanner = new Html5QrcodeScanner('reader', {
-      qrbox: {
-        width: 250,
-        height: 250,
-      },
-       fps: 5
-    })
-  
-    scanner.render(success, error);
-  
-  
-    function success(result){
-      scanner.clear();
-      setScanResult(result);
-    }
-  
-    function error(error){
-         console.log(error) 
-    }
- */
-  }, []);
 
   return (
     <>
@@ -207,9 +204,10 @@ export default function SideBar() {
                 return (
               <li key={link.title} className="flex w-full mt-1">
                 <Button
-                  color="default"
+                  color=""
+
                   variant="light"
-                  className="w-full h-12 p-0"
+                  className="w-full h-12 p-0 "
                   isIconOnly={expanded ? false : true}
                 >
                   <Link
@@ -291,12 +289,17 @@ export default function SideBar() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="flat">
-                {/*  <DropdownItem key="perfil" startContent={<Profile />}>
+                 <DropdownItem key="perfil" startContent={<Profile />}
+                 onClick={() => {
+                  router.push("/admin/perfil");
+                }}>
                   Perfil
                 </DropdownItem>
-                <DropdownItem key="editar" startContent={<Edit />}>
-                  Editar
-                </DropdownItem> */}
+                <DropdownItem key="cuenta" startContent={<Cuenta />} onClick={() => {
+                  router.push("/admin/mi-cuenta");
+                }}>
+                  Mi cuenta
+                </DropdownItem>
                 <DropdownItem
                   key="qr"
                   showDivider
