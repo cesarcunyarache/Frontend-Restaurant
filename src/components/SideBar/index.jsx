@@ -192,7 +192,7 @@ export default function SideBar() {
               !expanded ? "w-0 opacity-0" : ""
             }`}
           >
-            Bravaso
+            Bravazo
           </span>
         </div>
         <hr />
