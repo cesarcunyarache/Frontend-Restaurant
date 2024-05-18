@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
@@ -16,6 +15,7 @@ import {
   User,
   Pagination,
   Spinner,
+  Avatar
 } from "@nextui-org/react";
 import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
@@ -29,6 +29,8 @@ import Select from "@/components/Form/Select";
 import { useRouter } from "next/navigation";
 import Edit from "@/components/Icon/Edit";
 import Qr from "@/components/Icon/Qr";
+import Input from "../Form/Input";
+
 
 /* const columns = [
   { name: "ID", uid: "id", sortable: true },
@@ -79,8 +81,9 @@ export default function Index({
   status = false,
   isActiveBtn = false,
   isSearch = true,
-  statusProductos = false,
+  statusFilterDrown = false,
   statusMeseros = false,
+  buttonTable = null,
 }) {
   const router = useRouter();
   const users = !isLoading ? data : [];
@@ -171,10 +174,10 @@ export default function Index({
               isBordered: true,
               className: "mr-2 animate-pulse",
             }}
-            description={user.numeroDoc}
-            name={user.nombres}
+            description={user?.numeroDoc}
+            name={user?.nombres}
           >
-            {user.numeroDoc}
+            {user?.numeroDoc}
           </User>
         );
 
@@ -200,14 +203,19 @@ export default function Index({
               radius: "sm",
               isBordered: true,
               className: "mr-2",
-              src: user.imagen,
-              name: user.nombres,
+              src: user?.imagen,
+              name: user?.nombres,
             }}
-            description={user.numeroDoc}
-            name={user.nombres}
+            description={user?.numeroDoc}
+            name={user?.nombres}
           >
-            {user.numeroDoc}
+            {user?.numeroDoc}
           </User>
+        );
+
+      case "imagen":
+        return (
+          <Avatar isBordered radius="full" src={user.imagen} name={user.categoria} />
         );
 
       case "infoProducto":
@@ -217,14 +225,14 @@ export default function Index({
               radius: "sm",
               isBordered: true,
               className: "mr-2",
-              src: user.imagen,
-              name: user.nombre,
+              src: user?.imagen,
+              name: user?.nombre,
             }}
-            description={"S/" + user.precio}
-            name={user.nombre}
+            description={"S/" + user?.precio}
+            name={user?.nombre}
           >
             {"S/"}
-            {user.precio}
+            {user?.precio}
           </User>
         );
 
@@ -249,7 +257,7 @@ export default function Index({
           </Chip>
         );
 
-      case "estadoProducto":
+      case "estado":
         return (
           <Chip
             className="capitalize"
@@ -286,7 +294,7 @@ export default function Index({
               <DropdownMenu>
                 <DropdownItem
                   onClick={() => {
-                    router.push(`/admin/reservas/${user.idReserva}/`);
+                    router.push(`/admin/reservas/${user?.idReserva}/`);
                   }}
                 >
                   Ver Detalle
@@ -295,6 +303,54 @@ export default function Index({
             </Dropdown>
           </div>
         );
+      case "accionCliente":
+        return (
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <VerticalDotsIcon className="text-default-300" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onClick={() => {
+                    router.push(`/admin/clientes/${user?.idCliente}/editar`);
+                  }}
+                >
+                  Editar
+                </DropdownItem>
+                {/* 
+                {user?.idUsuario === null ? (
+                  <DropdownItem
+                    onClick={() => {
+                      router.push(`/admin/usuarios/registro/${user?.idEmpleado}`);
+                    }}
+                  >
+                    Crear Usuario
+                  </DropdownItem>
+                ) : (
+                  <DropdownItem
+                    onClick={() => {
+                      router.push(`/admin/usuarios/${user?.idUsuario}/editar`);
+                    }}
+                  >
+                    Editar Usuario
+                  </DropdownItem>
+                )} */}
+
+                <DropdownItem
+                  onClick={() => {
+                    router.push(`/admin/meseros/registro/${user?.idEmpleado}`);
+                  }}
+                >
+                  Crear Venta
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        );
+
       case "accion":
         return (
           <div className="relative flex justify-start items-center gap-2">
@@ -307,16 +363,16 @@ export default function Index({
               <DropdownMenu>
                 <DropdownItem
                   onClick={() => {
-                    router.push(`/admin/colaboradores/${user.id}/editar`);
+                    router.push(`/admin/empleados/${user?.idEmpleado}/editar`);
                   }}
                 >
                   Editar
                 </DropdownItem>
 
-                {user.idUsuario === null ? (
+                {user?.idUsuario === null ? (
                   <DropdownItem
                     onClick={() => {
-                      router.push(`/admin/usuarios/registro/${user.id}`);
+                      router.push(`/admin/usuarios/registro/${user?.idEmpleado}`);
                     }}
                   >
                     Crear Usuario
@@ -324,7 +380,7 @@ export default function Index({
                 ) : (
                   <DropdownItem
                     onClick={() => {
-                      router.push(`/admin/usuarios/${user.idUsuario}/editar`);
+                      router.push(`/admin/usuarios/${user?.idUsuario}/editar`);
                     }}
                   >
                     Editar Usuario
@@ -333,7 +389,7 @@ export default function Index({
 
                 <DropdownItem
                   onClick={() => {
-                    router.push(`/admin/meseros/registro/${user.id}`);
+                    router.push(`/admin/meseros/registro/${user?.idEmpleado}`);
                   }}
                 >
                   Crear o Editar Mesero
@@ -349,10 +405,28 @@ export default function Index({
               color="default"
               variant="bordered"
               size="sm"
-              className="gap-0 border-hidden font-bold hover:underline"
+              className="gap-0 border-hidden text-primary font-bold hover:underline"
               startContent={<Edit />}
               onClick={() => {
-                router.push(`/admin/usuarios/${user.id}/editar`);
+                router.push(`/admin/usuarios/${user?.idUsuario}/editar`);
+              }}
+            >
+              Editar
+            </Button>
+          </div>
+        );
+
+      case "accionEditarCategoria":
+        return (
+          <div className="relative py-2 flex justify-start items-center gap-2">
+            <Button
+              color="default"
+              variant="bordered"
+              size="sm"
+              className="gap-0 border-hidden text-primary font-bold hover:underline"
+              startContent={<Edit />}
+              onClick={() => {
+                router.push(`/admin/categorias/${user?.idCategoria}/editar`);
               }}
             >
               Editar
@@ -369,7 +443,7 @@ export default function Index({
               className="gap-0 border-hidden font-bold hover:underline"
               startContent={<Edit />}
               onClick={() => {
-                router.push(`/admin/meseros/${user.id}/editar`);
+                router.push(`/admin/meseros/${user?.idEmpleado}/editar`);
               }}
             >
               Editar
@@ -387,7 +461,7 @@ export default function Index({
               className="gap-0 border-hidden font-bold hover:underline"
               startContent={<Edit />}
               onClick={() => {
-                router.push(`/admin/productos/${user.idProducto}/editar`);
+                router.push(`/admin/productos/${user?.idProducto}/editar`);
               }}
             >
               Editar
@@ -437,9 +511,8 @@ export default function Index({
     return (
       <div className="flex flex-col gap-4">
         <div
-          className={`flex gap-3 items-end ${
-            isSearch ? "justify-between" : "justify-between"
-          }`}
+          className={`flex gap-3 items-end ${isSearch ? "justify-between" : "justify-between"
+            }`}
         >
           {isSearch && (
             <Input
@@ -449,10 +522,6 @@ export default function Index({
               startContent={<SearchIcon />}
               value={filterValue}
               onClear={() => onClear()}
-              variant="bordered"
-              radius="sm"
-              size="md"
-              labelPlacement="outside"
               onValueChange={onSearchChange}
             />
           )}
@@ -489,7 +558,7 @@ export default function Index({
               </Dropdown>
             )}
 
-            {statusProductos && (
+            {statusFilterDrown && (
               <Dropdown>
                 <DropdownTrigger className="hidden sm:flex">
                   <Button
@@ -568,17 +637,8 @@ export default function Index({
               </DropdownMenu>
             </Dropdown>
 
-            {isActiveBtn && (
-              <Button
-                color="default"
-                className="bg-zinc-900 text-white"
-                endContent={btn === "Escanear Qr" ? <Qr /> : <PlusIcon />}
-                onClick={() => {
-                  btnLink !== "" ? router.push(btnLink) : "";
-                }}
-              >
-                {btn}
-              </Button>
+            {buttonTable != null && (
+              buttonTable
             )}
           </div>
         </div>
@@ -627,7 +687,7 @@ export default function Index({
           showControls
           showShadow
           classNames={{
-            cursor: "bg-foreground text-background",
+            cursor: "bg-primary text-background",
           }}
           color="default"
           page={page}
@@ -697,11 +757,8 @@ export default function Index({
         {(item) => (
           <TableRow
             key={
-              item.idReserva
-                ? item.idReserva
-                : item.id || item.idProducto
-                ? item.idProducto
-                : item.id
+              /* item.idReserva ? item?.idReserva : item?.idCliente || item?.idProducto ? item?.idCliente : item?.idEmpleado */
+              item.idEmpleado ?? item.idCliente ?? item.idCategoria
             }
           >
             {(columnKey) => (

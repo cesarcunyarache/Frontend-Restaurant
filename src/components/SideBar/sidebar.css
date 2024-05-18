@@ -49,7 +49,7 @@ main.min-main{
 @media (max-width: 850px){
     .barra-lateral{
         position: fixed;
-        left: -290px;
+        left: -300px;
         transition: left 0.5s ease,background-color 0.3s ease,left 0.5s ease;
        
     }

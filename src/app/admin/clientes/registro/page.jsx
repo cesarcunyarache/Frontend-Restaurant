@@ -4,14 +4,16 @@ import Input from "@/components/Form/Input";
 import Button from "@/components/Form/Button";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
 import {
-  usePostCreateMutation,
   usePutUpdateMutation,
-} from "@/redux/services/colaboradorApi";
+  usePostCreateMutation,
+} from "@/redux/services/clienteApi";
 import Select from "@/components/Form/Select";
-import Textarea from "@/components/Form/Textarea";
+import Textarea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
+import DataPicker from '@/components/Form/DataPicker'
 
 const validateDocument = {
   1: {
@@ -50,6 +52,7 @@ export default function Page({
   isEditProfile = false,
 }) {
   const {
+    idCliente,
     idTipoDoc,
     numeroDoc,
     nombres,
@@ -59,6 +62,7 @@ export default function Page({
     genero,
     direccion,
   } = data?.data ?? {
+    
     idTipoDoc: "",
     numeroDoc: "",
     nombres: "",
@@ -94,7 +98,7 @@ export default function Page({
       if (response?.data) {
         toast.success(response?.data?.message);
         if (lastClickedButton === "crear") {
-          router.push("/admin/colaboradores");
+          router.push("/admin/clientes");
         } else if (lastClickedButton === "crearOtro") {
           reset();
         }
@@ -107,14 +111,14 @@ export default function Page({
   const onSubmitUpdate = handleSubmit(async (data) => {
     try {
       console.log({ ...data, id: param });
-      const response = await putUpdate({ ...data, id: param });
+      const response = await putUpdate({ ...data, id: param, idCliente });
       if (response.error) {
         console.log(response.error);
         toast.error(response?.error?.data?.message);
       }
       if (response.data) {
         if (!isEditProfile) {
-          router.push("/admin/colaboradores");
+          router.push("/admin/clientes");
         }
         toast.success(response?.data?.message);
       }
@@ -130,31 +134,31 @@ export default function Page({
           data={
             isUpdate
               ? [
-                  {
-                    value: "Colaboradores",
-                    href: "/admin/colaboradores",
-                  },
-                  {
-                    value: nombres,
-                    href: `/admin/colaboradores/${param}/editar`,
-                  },
-                  {
-                    value: "Edit",
-                    href: `/admin/colaboradores/${param}/editar`,
-                  },
-                ]
+                {
+                  value: "Clientes",
+                  href: "/admin/clientes",
+                },
+                {
+                  value: nombres,
+                  href: `/admin/clientes/${param}/editar`,
+                },
+                {
+                  value: "Edit",
+                  href: `/admin/clientes/${param}/editar`,
+                },
+              ]
               : [
-                  {
-                    value: "Colaboradores",
-                    href: "/admin/colaboradores",
-                  },
-                  {
-                    value: "Crear",
-                    href: "/admin/colaboradores/registro",
-                  },
-                ]
+                {
+                  value: "Clientes",
+                  href: "/admin/clientes",
+                },
+                {
+                  value: "Crear",
+                  href: "/admin/clientes/registro",
+                },
+              ]
           }
-          title={"Colaboradores"}
+          title={"Clientes"}
         />
       )}
       <form
@@ -304,7 +308,7 @@ export default function Page({
                 name="fechaNacimiento"
                 defaultValue={fechaNacimiento}
                 register={register}
-                
+
                 options={{
                   required: {
                     value: true,
@@ -325,7 +329,10 @@ export default function Page({
                 }
                 isRequired
               />
+           
             </div>
+
+
           </div>
 
           <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
@@ -409,27 +416,6 @@ export default function Page({
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
-              <div className="sm:col-span-3">
-                <Textarea
-                  /*  defaultValue={comentario} */
-                  label="Dirección"
-                  name="direccion"
-                  defaultValue={direccion}
-                  register={register}
-                  options={{
-                    required: {
-                      value: true,
-                      message: "Este campo es requerido",
-                    },
-                  }}
-                  color={errors.direccion && "danger"}
-                  isInvalid={errors.direccion ? true : false}
-                  errorMessage={errors.direccion && errors.direccion.message}
-                  isRequired
-                />
-              </div>
-            </div>
           </div>
         </div>
 
@@ -439,7 +425,7 @@ export default function Page({
               <Button
                 isLoading={isLoadingUpdate}
                 type="submit"
-                className="bg-neutral-900 text-white  w-48 my-4"
+                className="  my-4"
               >
                 Actualizar
               </Button>
@@ -448,7 +434,7 @@ export default function Page({
                 <Button
                   isLoading={isLoadingCreate && lastClickedButton === "crear"}
                   type="submit"
-                  className="bg-neutral-900 text-white  w-10 my-4"
+                  className="my-4"
                   onClick={() => setLastClickedButton("crear")}
                 >
                   Crear
@@ -459,14 +445,14 @@ export default function Page({
                   isLoading={
                     isLoadingCreate && lastClickedButton === "crearOtro"
                   }
-                  className="bg-zinc-50 border-2 text-black w-50 my-4"
+                  className="bg-zinc-50 border-2 text-black  my-4"
                   onClick={() => setLastClickedButton("crearOtro")}
                 >
                   Crear y Crear otro
                 </Button>
 
                 <Button
-                  className="bg-zinc-50 border-2 text-black w-10 my-4"
+                  className="bg-zinc-50 border-2 text-black  my-4"
                   onClick={() => router.back()}
                 >
                   Cancelar

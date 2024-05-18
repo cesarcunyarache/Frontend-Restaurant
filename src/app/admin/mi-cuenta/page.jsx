@@ -6,7 +6,7 @@ import React from "react";
 import Table from "@/components/Table";
 import {useGetProfileQuery} from '@/redux/services/userApi'
 
-import Page from '../colaboradores/[id]/editar/page'
+import Page from '../empleados/[id]/editar/page'
 import PageEditUser from '../usuarios/[id]/editar/page'
 
 export default function PageMiCuenta() {

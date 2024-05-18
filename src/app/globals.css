@@ -17,6 +17,14 @@
 }
 
 
+.group[data-focus=true] .group-data-[focus=true]:border-default-foreground {
+  --tw-border-opacity: 1;
+  border-color: red
+}
+
+
+
+
 /* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

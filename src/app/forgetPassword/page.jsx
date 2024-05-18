@@ -26,16 +26,17 @@ export default function Page() {
   });
 
   return (
-    <div className="w-full h-screen pt-36">
+    <div className="flex h-screen w-full justify-center items-center px-4">
       <Form
         onSubmit={onSubmit}
         method="POST"
-        title='Ingresa tu correo'
+        title='Ingresa tu correo electrónico'
         noValidate
+        className="lg:min-w-[500px]  md:min-w-[500px] min-w-full "
       >
         <Input
           autoFocus
-          label="Correo"
+          label="Correo electrónico"
           type="email"
           placeholder="Introduce tu correo electrónico"
           isRequired
@@ -56,7 +57,7 @@ export default function Page() {
           isInvalid={errors.correo ? true : false}
           errorMessage={errors.correo && errors.correo.message}
         />
-        <Button type="submit" isLoading={isLoading}>Enviar</Button>
+        <Button type="submit" isLoading={isLoading} className="w-full mt-3">Enviar</Button>
       </Form>
     </div>
   );

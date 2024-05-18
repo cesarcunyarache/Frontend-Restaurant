@@ -10,11 +10,11 @@ export default function Form({
   return (
     <form
       onSubmit={onSubmit}
-      className={`max-w-md p-4 mx-auto border rounded-lg ${className}`}
+      className={` p-4  border rounded-lg ${className}`}
       {...props}
     >
       {title === "" ? null : (
-        <h1 className="text-center text-lg font-black my-4">{title}</h1>
+        <h1 className="text-center text-2xl font-black my-10">{title}</h1>
       )}
       {children}
     </form>

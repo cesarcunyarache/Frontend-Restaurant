@@ -7,7 +7,7 @@ export default function Index ({ children, ...props }) {
   const router = useRouter();
   return (
     <Link
-      className="text-zinc-900 text-sm font-bold cursor-pointer"
+      className="text-primary text-sm font-bold cursor-pointer"
       underline="hover"
       {...props}
       onClick={() => router.push(props.redirect)}

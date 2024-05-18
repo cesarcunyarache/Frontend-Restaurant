@@ -12,7 +12,7 @@ import Profile from "../Icon/Profile";
 export default function index({
   data = [],
   name = "",
-  register = () => {},
+  register = () => { },
   options = {},
   ...props
 }) {
@@ -25,16 +25,39 @@ export default function index({
       placeholder="Seleccione el colaborador"
       radius="sm"
       size="md"
+      color="warning"
       popoverContent
+
+
+      classNames={{
+        "group-data-[focus=true]": "border-primary",
+
+        base: [
+
+
+          "input-wrapper: group-data-[focus=true]:border-primary",
+          "data-[hover=true]:border-[#E6E6E6]"
+          ,
+
+
+        ],
+
+
+      }}
       key={name}
       {...props}
       {...register(name, options)}
-     
+
     >
       {(data) => {
         if (data.idUsuario === null) {
           return (
-            <AutocompleteItem key={data.id} textValue={data.numeroDoc}>
+            <AutocompleteItem key={data.idEmpleado}  color="warning" textValue={data.numeroDoc} classNames={{
+              inputWrapper: [
+                "group-data-[focus=true]:border-primary",
+                "data-[hover=true]:border-[#E6E6E6]"
+              ],
+            }}>
               <div className="flex gap-4 items-center p-1">
                 <Avatar
                   isBordered

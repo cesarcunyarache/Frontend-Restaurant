@@ -6,18 +6,21 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+
 import {
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
-  Button as Botton,
+   Button as Botton,
   useDisclosure,
 } from "@nextui-org/react";
 
+
+
 import { usePutUpdatePasswordMutation } from "../../redux/services/usuariosApi";
 
-export default function UpdateEmail() {
+export default function UpdatePassword(dataUser = {}) {
   const {
     register,
     handleSubmit,
@@ -27,6 +30,8 @@ export default function UpdateEmail() {
     getValues,
     formState: { errors },
   } = useForm();
+
+
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState("blur");
@@ -42,8 +47,10 @@ export default function UpdateEmail() {
 
   const onSubmitModal = handleSubmit(async (data) => {
     try {
-      console.log({ ...data, ...getValues });
-      const response = await putUpdatePassword({ ...data, ...getValues });
+
+      const idUsuario = dataUser?.dataUser?.idUsuario
+      console.log({ ...data, ...getValues, idUsuario })
+      const response = await putUpdatePassword({ ...data, ...getValues, idUsuario });
       if (response.error) {
         console.log(response.error);
         toast.error(response.error.data.message);
@@ -127,7 +134,7 @@ export default function UpdateEmail() {
             <div className="sm:col-span-3">
               <Button
                 type="submit"
-                className="bg-neutral-900 text-white w-40 my-4"
+                className=" w-40 my-4"
               >
                 Actualizar
               </Button>
@@ -176,16 +183,16 @@ export default function UpdateEmail() {
                   />
 
                   <div className="flex flex-row justify-end gap-2">
-                    <Botton color="danger" variant="light" onPress={onClose}>
+                    <Botton color="danger" variant="light" onPress={onClose} >
                       Cerrar
                     </Botton>
-                    <Botton
+                    <Button
                       type="submit"
-                     isLoading={isLoading}
-                      className="bg-neutral-900 text-white hover:bg-neutral-700"
+                      isLoading={isLoading}
+                      className=" "
                     >
                       Actualizar
-                    </Botton>
+                    </Button>
                   </div>
                 </form>
               </ModalBody>

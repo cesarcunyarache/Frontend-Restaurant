@@ -32,7 +32,7 @@ import {
 
 } from "recharts";
 
- const dataReserva = [
+const dataReserva = [
   {
     fecha: "2023-11-10",
     reservasTotales: 15,
@@ -225,11 +225,11 @@ import Customers from "@/components/Icon/Customers";
 export default function Page() {
   /*      const { data, isLoading, isError, error } = useGetTotalReservasQuery(); */
 
-  const { data: totales, isLoading: isLoadingTotal} = useGetTotalRCCQuery();
+  const { data: totales, isLoading: isLoadingTotal } = useGetTotalRCCQuery();
 
-  const { data: totalReser, isLoading: isLoadingReser} = useGetTotalReservasQuery();
+  const { data: totalReser, isLoading: isLoadingReser } = useGetTotalReservasQuery();
 
- 
+
 
 
   /*      console.log(data)
@@ -242,7 +242,7 @@ export default function Page() {
 
   const { data: reservas, isLoading } = useGetReservasQuery();
 
-  const users = !isLoading ? reservas.data : [];
+  const users = !isLoading ? reservas?.data : [];
 
   const inicialVisibleColumns = [
     "idReserva",
@@ -272,12 +272,19 @@ export default function Page() {
 
 
   return (
+    <div className="flex justify-center items-center w-full h-full">
+      <h1 className="text-xl text-slate-300">Dashboard</h1>
+
+    </div>
+  )
+
+  /* return (
     <div className="max-w-7xl h-full p-4">
       {/*  {isLoading ? (
         <Load/>
       ) : ( */}
 
-      <div className="flex flex-1  w-full gap-4">
+     /*  <div className="flex flex-1  w-full gap-4">
         <Card key={1} className="w-full rounded-lg">
           <CardBody>
             <div className="flex flex-1">
@@ -448,5 +455,5 @@ export default function Page() {
         />
       </div>
     </div>
-  );
-}
+  );  
+}*/

@@ -1,8 +1,8 @@
 "use client";
 import Load from "@/components/Load";
 import {useEffect, useState} from 'react'
-import Page from "@/app/admin/colaboradores/registro/page";
-import { useGetSearchByIdQuery } from "@/redux/services/colaboradorApi";
+import Page from "@/app/admin/clientes/registro/page";
+import { useGetSearchByIdQuery } from "@/redux/services/clienteApi";
 export default function PageEditar({ params, isEditProfile = false }) {
   const  { data, isLoading, refetch } = useGetSearchByIdQuery(params?.id);
 

@@ -9,13 +9,14 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import {usePutResetPasswordMutation} from '../../redux/services/userApi'
+import { usePutResetPasswordMutation } from '../../redux/services/userApi'
+import InputPassword from "@/components/Form/InputPassword";
 
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { register, handleSubmit,  watch,
+  const { register, handleSubmit, watch,
     formState: { errors }, } = useForm();
 
   const [putResetPassword, { data, isLoading }] =
@@ -41,18 +42,18 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full h-screen pt-36">
+    <div className="flex h-screen w-full justify-center items-center px-4">
       <Form
         onSubmit={onSubmit}
         method="POST"
         title="Restablecer Contraseña"
         noValidate
+        className="lg:min-w-[500px]  md:min-w-[500px] min-w-full "
       >
 
-        <Input
+        <InputPassword
           label="Nueva Contraseña"
           placeholder=" "
-          type="password"
           isRequired
           name="contrasena"
           register={register}
@@ -65,16 +66,15 @@ export default function Page() {
               value: 6,
               message: "La contraseña debe tener al menos 6 caracteres",
             },
-        
+
           }}
           color={errors.nuevaContrasena && "danger"}
           isInvalid={errors.nuevaContrasena ? true : false}
           errorMessage={errors.nuevaContrasena && errors.nuevaContrasena.message}
         />
-        <Input
+        <InputPassword
           label="Confirmar Contraseña"
           placeholder=" "
-          type="password"
           isRequired
           name="confirmContrasena"
           register={register}
@@ -84,13 +84,13 @@ export default function Page() {
               message: "Este campo es requerido",
             },
             validate: (value) =>
-             value === watch('contrasena') || "Las contraseñas no coinciden",
+              value === watch('contrasena') || "Las contraseñas no coinciden",
           }}
           color={errors.confirmContrasena && "danger"}
           isInvalid={errors.confirmContrasena ? true : false}
           errorMessage={errors.confirmContrasena && errors.confirmContrasena.message}
         />
-        <Button type="submit" isLoading={isLoading}>Restablecer</Button>
+        <Button type="submit" isLoading={isLoading} className="w-full mt-3">Restablecer</Button>
       </Form>
     </div>
   );

@@ -20,7 +20,7 @@ import OtpInput from "react-otp-input";
 import { Link as NextLink } from "@nextui-org/react";
 
 import Select from "@/components/Form/Select";
-import Textarea from "@/components/Form/Textarea";
+import Textarea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
 import { useGetColaboradoresQuery } from "@/redux/services/colaboradorApi";
@@ -90,7 +90,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
     onOpen();
   };
 
-  const [idColaborador, setIdColaborador] = useState(param);
+  const [idEmpleado, setIdColaborador] = useState(param);
 
   const { data: colab, isLoading } = useGetColaboradoresQuery();
 
@@ -122,11 +122,11 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (idColaborador !== null && idColaborador !== "") {
+      if (idEmpleado !== null && idEmpleado !== "") {
         if (isModal) {
           handleOpen();
         } else {
-          const response = await postSendOTP({ ...data, idColaborador });
+          const response = await postSendOTP({ ...data, idEmpleado });
           if (response.error) toast.error(response.error.data.message);
           if (response.data) {
             toast.success(response.data.message)
@@ -144,14 +144,14 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmitModal = handleSubmit(async () => {
     try {
-      if (idColaborador !== null && idColaborador !== "") {
+      if (idEmpleado !== null && idEmpleado !== "") {
         if (otp.length < 4) {
           toast.error("Completa los campos");
         } else {
           const data = {
             ...getValues(),
             otp,
-            idColaborador,
+            idEmpleado,
           };
           const response = await postRegister(data);
           if (response.error) toast.error(response.error.data.message);
@@ -176,8 +176,8 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onHandleReSend = async () => {
     try {
-      if (idColaborador !== null && idColaborador !== "") {
-        const response = await postSendOTP({ ...getValues(), idColaborador });
+      if (idEmpleado !== null && idEmpleado !== "") {
+        const response = await postSendOTP({ ...getValues(), idEmpleado });
         if (response.error) toast.error(response.error.data.message);
         if (response.data) {
           toast.success(response.data.message)
@@ -194,7 +194,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
   /* const onSubmitDefault = handleSubmit(async (data) => {
     handleOpen();
      try {
-      console.log({ ...data, idColaborador });
+      console.log({ ...data, idEmpleado });
       const response = await postCreate(data);
       if (response?.error) toast.error(response?.error?.data?.message);
       if (response?.data) {
@@ -269,9 +269,9 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 <div className="sm:col-span-3">
                   <Autocomplete
                     data={isLoading ? [] : colab?.data}
-                    name="idColaborador"
+                    name="idEmpleado"
                     register={register}
-                    defaultSelectedKey={idColaborador}
+                    defaultSelectedKey={idEmpleado}
                     onSelectionChange={(value) => {
                       setIdColaborador(value);
                     }}
@@ -282,10 +282,10 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                         }
                       },
                     }}
-                    color={idColaborador === null && "danger"}
-                    isInvalid={idColaborador === null && true}
+                    color={idEmpleado === null && "danger"}
+                    isInvalid={idEmpleado === null && true}
                     errorMessage={
-                      idColaborador === null && "Este campo es requerido"
+                      idEmpleado === null && "Este campo es requerido"
                     }
                     isRequired
                   />
@@ -412,7 +412,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 <Button
                   isLoading={isLoadingOTP && lastClickedButton === "crear"}
                   type="submit"
-                  className="bg-neutral-900 text-white  w-10 my-4"
+                  className="my-4"
                   onClick={() => setLastClickedButton("crear")}
                 >
                   Crear
@@ -496,7 +496,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                         <Botton
                           type="submit"
                           isLoading={isLoadingOTP || isLoadingCreate}
-                          className="bg-neutral-900 text-white hover:bg-neutral-700"
+                          className=" hover:bg-neutral-700"
                         >
                           {!isLoadingOTP && !isLoadingCreate && "Verficar"}
                         </Botton>

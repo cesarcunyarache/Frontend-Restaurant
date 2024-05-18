@@ -24,9 +24,11 @@ import { Link as NextLink } from "@nextui-org/react";
 export default function UpdateEmail(data = {}) {
 
 
-  const { correo, id } = data?.data ?? {
+  const { correo, idUsuario } = data?.data ?? {
     correo: "",
   };
+
+
 
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,7 +60,9 @@ export default function UpdateEmail(data = {}) {
       if (isModal) {
         handleOpen();
       } else {
-        const response = await postSendOTPUpdateEmail({...data, id});
+
+        console.log({...data, idUsuario})
+        const response = await postSendOTPUpdateEmail({...data, idUsuario});
         if (response.error) toast.error(response.error.data.message);
         if (response.data) {
           handleOpen();
@@ -78,7 +82,7 @@ export default function UpdateEmail(data = {}) {
         const data = {
           ...getValues(),
           otp,
-          id,
+          idUsuario,
         };
         const response = await putUpdateEmail(data);
         if (response.error) toast.error(response.error.data.message);
@@ -101,7 +105,7 @@ export default function UpdateEmail(data = {}) {
       const response = await postSendOTPUpdateEmail({
         correo: watch("correo"),
         /* contrasena: watch("contrasena"), */
-        id: id
+        idUsuario: idUsuario
       });
       if (response.error) toast.error(response.error.data.message);
       if (response.data) toast.error(response.data.message);
@@ -171,7 +175,7 @@ export default function UpdateEmail(data = {}) {
             <div className="sm:col-span-3">
               <Button
                 type="submit"
-                className="bg-neutral-900 text-white w-40 my-4"
+                className=" w-40 my-4"
                 isLoading={isLoadingOTP}
               >
                 Actualizar
@@ -231,13 +235,13 @@ export default function UpdateEmail(data = {}) {
                     <Botton color="danger" variant="light" onPress={onClose}>
                       Cerrar
                     </Botton>
-                    <Botton
+                    <Button
                       type="submit"
                       isLoading={isLoading || isLoadingOTP}
-                      className="bg-neutral-900 text-white hover:bg-neutral-700"
+                      className=""
                     >
                       {!isLoading && !isLoadingOTP && "Verficar"}
-                    </Botton>
+                    </Button>
                   </div>
                 </form>
               </ModalBody>

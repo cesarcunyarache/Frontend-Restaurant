@@ -29,7 +29,7 @@ export const colaboradorApi = createApi({
       }),
       invalidatesTags: ["Colaboradores"],
     }),
-
+    
     putUpdate: builder.mutation({
       query: (data) => ({
         url: "colaborador/",

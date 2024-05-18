@@ -1,14 +1,18 @@
 "use client";
 
 import { useGetUsuariosQuery } from "@/redux/services/usuariosApi";
+import { useRouter } from "next/navigation";
+
 import Breadcrumbs from '@/components/Breadcrumbs'
-import React from "react";
 import Table from "@/components/Table";
+import Button from "@/components/Form/Button";
+import { PlusIcon } from "@/components/Icon/PlusIcon";
+
 export default function Page() {
+
   const { data, isLoading, isError, error } = useGetUsuariosQuery();
-
-  const users = !isLoading ? data.data : [];
-
+  const users = !isLoading ? data?.data : [];
+  const router = useRouter();
 
   const inicialVisibleColumns = [
     "id",
@@ -18,19 +22,19 @@ export default function Page() {
   ];
 
   const columns = [
-    { name: "ID", uid: "id", sortable: true },
-    { name: "Información Personal", uid: "name"},
-    { name: "Correo", uid: "correo", sortable: true,  search: true },
-    { name: "Contraseña", uid: "contrasena", sortable: true ,  search: true},
+    { name: "ID", uid: "idUsuario", sortable: true },
+    { name: "Información Personal", uid: "name" },
+    { name: "Correo", uid: "correo", sortable: true, search: true },
+    { name: "Contraseña", uid: "contrasena", sortable: true, search: true },
     { name: "Rol", uid: "idRol", sortable: true },
-    {name: "Nombres", uid: "nombres", sortable: true, search: true},
-    {name: "Número de documento", uid: "numeroDoc", sortable: true, search: true},
+    { name: "Nombres", uid: "nombres", sortable: true, search: true },
+    { name: "Número de documento", uid: "numeroDoc", sortable: true, search: true },
     { name: "Accion", uid: "acciones" },
   ];
 
   return (
     <div className="p-4">
-       <Breadcrumbs
+      <Breadcrumbs
         data={[
           {
             value: "Usuarios",
@@ -53,6 +57,12 @@ export default function Page() {
           btn="Nuevo Usuario"
           btnLink="usuarios/registro"
           /* status={true} */
+          buttonTable={<Button
+            endContent={<PlusIcon />}
+            onClick={() => {
+              router.push("usuarios/registro");
+            }}
+          > Nuevo Usuario</Button>}
         />
       </div>
     </div>

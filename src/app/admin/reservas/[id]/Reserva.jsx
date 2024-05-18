@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Avatar } from "@nextui-org/react";
 import { usePutUpdateReservaMutation } from "@/redux/services/reservaApi";
 import Select from "@/components/Form/Select";
-import Textarea from "@/components/Form/Textarea";
+import Textarea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
 import AutoCompleteMeseros from "@/components/Autocomplete/AutoCompleteMeseros";

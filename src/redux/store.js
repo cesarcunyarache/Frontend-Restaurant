@@ -11,6 +11,7 @@ import loadReducer from "./features/loadSlice";
 
 
 import { reservaApi } from "./services/reservaApi";
+import { categoriaApi } from "./services/categoriaApi";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     [meseroApi.reducerPath]: meseroApi.reducer,
     [clienteApi.reducerPath]: clienteApi.reducer,
     [productoApi.reducerPath]: productoApi.reducer,
+    [categoriaApi.reducerPath]: categoriaApi.reducer,
   },
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
@@ -33,6 +35,7 @@ const store = configureStore({
       [meseroApi.middleware],
       [clienteApi.middleware],
       [productoApi.middleware],
+      [categoriaApi.middleware],
     ),
 });
 

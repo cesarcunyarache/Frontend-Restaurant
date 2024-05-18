@@ -10,6 +10,13 @@ export default function index({
   return (
     <Textarea
       className={`py-2 ${className}`}
+      classNames={{
+
+        inputWrapper: [
+          "group-data-[focus=true]:border-primary",
+          "data-[hover=true]:border-[#E6E6E6]"
+        ],
+      }}
       variant="bordered"
       radius="sm"
       size="md"

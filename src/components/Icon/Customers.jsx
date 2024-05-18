@@ -8,7 +8,7 @@ export default function Customers({ className = ""}) {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={`w-6 h-6 ${className}`}
+      className={`w-5 h-5 ${className}`}
     >
       <path
         strokeLinecap="round"

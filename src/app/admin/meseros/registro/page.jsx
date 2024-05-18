@@ -10,7 +10,7 @@ import {
   usePutUpdateMeseroMutation,
 } from "@/redux/services/meseroApi";
 import Select from "@/components/Form/Select";
-import Textarea from "@/components/Form/Textarea";
+import Textarea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
 import Autocomplete from "@/components/Autocomplete";
