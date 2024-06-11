@@ -11,7 +11,7 @@ export const productoApi = createApi({
   endpoints: (builder) => ({
 
     getProductos: builder.query({
-      query: () => "/producto/read",
+      query: () => "/producto/",
       providesTags: ["productos"],
     }),
 
@@ -37,13 +37,13 @@ export const productoApi = createApi({
 
     putUpdateProducto: builder.mutation({
       query: (data) => ({
-        url: "producto/update",
+        url: "producto/update/",
         method: "POST",
         body: data,
         credentials: "include",
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: "meseros" },
+        { type: "productos" },
         { type: "getSearchByIdProducto", id },
      
       ],

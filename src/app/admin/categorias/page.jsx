@@ -40,7 +40,6 @@ export default function Page() {
       sortable: true,
       search: true,
     },
-    { name: "Estado", uid: "estadoProducto", sortable: true },
     { name: "Accion", uid: "accionEditarCategoria" },
   ];
 

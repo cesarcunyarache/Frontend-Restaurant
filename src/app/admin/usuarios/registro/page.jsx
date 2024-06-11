@@ -19,6 +19,8 @@ import {
 import OtpInput from "react-otp-input";
 import { Link as NextLink } from "@nextui-org/react";
 
+import Prueba from "@/components/Autocomplete/Prueba"
+
 import Select from "@/components/Form/Select";
 import Textarea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -122,6 +124,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      
       if (idEmpleado !== null && idEmpleado !== "") {
         if (isModal) {
           handleOpen();
@@ -173,6 +176,8 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
       console.error(error);
     }
   });
+
+
 
   const onHandleReSend = async () => {
     try {
@@ -237,29 +242,29 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
             data={
               isUpdate
                 ? [
-                    {
-                      value: "Usuarios",
-                      href: "/admin/usuarios",
-                    },
-                    {
-                      value: nombres,
-                      href: `/admin/usuarios/${param}/editar`,
-                    },
-                    {
-                      value: "Edit",
-                      href: `/admin/usuarios/${param}/editar`,
-                    },
-                  ]
+                  {
+                    value: "Usuarios",
+                    href: "/admin/usuarios",
+                  },
+                  {
+                    value: nombres,
+                    href: `/admin/usuarios/${param}/editar`,
+                  },
+                  {
+                    value: "Edit",
+                    href: `/admin/usuarios/${param}/editar`,
+                  },
+                ]
                 : [
-                    {
-                      value: "Usuarios",
-                      href: "/admin/usuarios",
-                    },
-                    {
-                      value: "Crear",
-                      href: "/admin/usuarios/registro",
-                    },
-                  ]
+                  {
+                    value: "Usuarios",
+                    href: "/admin/usuarios",
+                  },
+                  {
+                    value: "Crear",
+                    href: "/admin/usuarios/registro",
+                  },
+                ]
             }
             title={"Usuarios"}
           />
@@ -268,6 +273,9 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
               <div className="mt-5 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
                 <div className="sm:col-span-3">
                   <Autocomplete
+                    label="Colaborador"
+                   
+                    placeholder="Seleccione el colaborador"
                     data={isLoading ? [] : colab?.data}
                     name="idEmpleado"
                     register={register}
@@ -282,7 +290,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                         }
                       },
                     }}
-                    color={idEmpleado === null && "danger"}
+                    color={idEmpleado === null && "danger"} 
                     isInvalid={idEmpleado === null && true}
                     errorMessage={
                       idEmpleado === null && "Este campo es requerido"
@@ -291,6 +299,8 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                   />
                 </div>
               </div>
+
+              
 
               <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-4">
                 <div className="sm:col-span-3">

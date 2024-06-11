@@ -22,7 +22,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
     categoria: "",
     descripcion: "",
-    estado: "",
+    estado: "1",
     imagen: "",
     costoPuntos: ""
   };
@@ -158,7 +158,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
         encType="multipart/form-data"
       >
         <div className="p-4 border  rounded-lg bg-white">
-          {isUpdate && (
+          {/* {isUpdate && (
             <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
               <div className="sm:col-span-3">
                 <label className="flex text-sm  leading-6 text-foreground-500">
@@ -173,7 +173,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 />
               </div>
             </div>
-          )}
+          )} */}
 
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
@@ -242,39 +242,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 </p>
               </label>
 
-              {/*   <input
-                className=" mt-1 flex w-full  rounded-md  border-gray-300 border-2 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-zinc-900 file:h-8 file:text-white file:text-sm file:font-medium"
-                type="file"
-                id="picture"
-                
-                accept="image/*"
-                {...register("imagen", {
-                  validate: (value) => {
-                    if (value.length == 0) {
-                      return toast.error("Seleccione una imagen");
-                    }
-                  },
-                })}
-              /> */}
-
-              {/*  {watch('imagen') != undefined && watch('imagen').length > 0 || imagen !== null && imagen !== '' ? (
-                <div
-                  className="flex items-center justify-center w-full"
-                  htmlFor="dropzone-file"
-                >
-                  <div className="flex flex-col items-center justify-center w-full   border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800  hover:bg-gray-100 p-2">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <img
-                        src={isUpdate ? imagen : URL?.createObjectURL(watch('imagen')[0])}
-                        alt="uploaded-image"
-                        accept="image/jpeg, image/png, image/jpg"
-                        className="object-contain max-h-96"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : ( */}
-              <div className="flex items-center justify-center w-ful">
+              <div className="flex items-center justify-center w-ful ">
                 <label
                   htmlFor="dropzone-file"
                   className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
@@ -286,12 +254,12 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                       htmlFor="dropzone-file"
                     >
 
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <div className="flex flex-col items-center justify-center ">
                         <img
                           src={typeof watch('imagen') === 'string' ? watch('imagen') : URL.createObjectURL(watch('imagen')[0])}
                           alt="uploaded-image"
                           accept="image/jpeg, image/png, image/jpg"
-                          className="object-fit max-h-60"
+                          className="object-fit max-h-60  p-3 "
                         />
                       </div>
 
@@ -322,13 +290,9 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                     })}
 
                   >
-
-
-
                   </input>
                 </label>
               </div>
-              {/*     )} */}
             </div>
           </div>
 
@@ -338,8 +302,9 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 placeholder="Seleccione el rol"
                 label="Estado"
                 data={[
-                  { key: 0, value: "Inhabilitado" },
                   { key: 1, value: "Habilitado" },
+                  { key: 0, value: "Inhabilitado" },
+                  
                 ]}
                 name="estado"
                 defaultSelectedKeys={[estado.toString()]}

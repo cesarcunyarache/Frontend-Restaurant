@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import {nextui} from "@nextui-org/react";
+import { nextui } from "@nextui-org/react";
 const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = {
@@ -13,6 +13,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'auto-fit': 'repeat(auto-fit, minmax(300px, 1fr))',
+      },
+
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -26,8 +30,21 @@ module.exports = {
 
     },
 
+    screens: {
+      'xs': { 'max': '780px' },
+
+      'sm': '780px',
+      // => @media (min-width: 576px) { ... }
+
+      'md': '960px',
+      // => @media (min-width: 960px) { ... }
+
+      'lg': '1440px',
+      // => @media (min-width: 1536px) { ... }
+    },
+
   },
   darkMode: "class",
-  plugins: [nextui({addCommonColors: true})],
+  plugins: [nextui({ addCommonColors: true })],
 }
 

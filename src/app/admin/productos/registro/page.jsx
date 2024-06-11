@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "@/components/Form/Input";
 import Button from "@/components/Form/Button";
 import { useForm } from "react-hook-form";
@@ -9,23 +9,28 @@ import {
   usePostCreateProductoMutation,
   usePutUpdateProductoMutation,
 } from "@/redux/services/productoApi";
+
+import {useGetCategoriasQuery} from "@/redux/services/categoriaApi"
 import Select from "@/components/Form/Select";
-import Textarea from "@/components/Form/TextArea";
+import TextArea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useRouter } from "next/navigation";
-import Autocomplete from "@/components/Autocomplete";
+import AutocompleteCategorias from "@/components/Autocomplete/AutoCompleteCategorias";
+import UploadImage from "@/components/Icon/UploadImage";
 
 export default function Page({ data = {}, isUpdate = false, param = "" }) {
-  const {  nombre, precio, estado, imagen, costoPuntos } = data?.data ?? {
-
+  const { nombre, descripcion, precio, estado, imagen, costoPuntos , idCategoria} = data?.data ?? {
+    idCategoria: "",
     nombre: "",
+    descripcion: "",
     precio: "",
-    estado: "",
+    estado: "1",
     imagen: "",
-    costoPuntos:""
+    costoPuntos: ""
   };
 
-  
+
+
 
   const router = useRouter();
 
@@ -36,9 +41,14 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
   const [putUpdateProducto, { isLoading: isLoadingUpdate }] =
     usePutUpdateProductoMutation();
 
+
   const [idProducto, setIdProducto] = useState(param);
+  const [IdCategoriaValue, setIdCategoriaValue] = useState(idCategoria);
   const [lastClickedButton, setLastClickedButton] = useState("");
 
+  const { data: categorias, isLoading } = useGetCategoriasQuery();
+
+ 
   const {
     register,
     handleSubmit,
@@ -49,14 +59,21 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (isUpdate && data?.data?.imagen) {
+      setValue("imagen", data?.data?.imagen);
+    }
+  }, [])
+
   const onSubmitDefault = handleSubmit(async (data) => {
     try {
       console.log(data);
 
       const formData = new FormData();
+      formData.append("idCategoria", IdCategoriaValue);
       formData.append("nombre", data.nombre);
+      formData.append("descripcion", data.descripcion);
       formData.append("precio", parseFloat(data.precio));
-      formData.append("costoPuntos", parseInt(data.costoPuntos));
       formData.append("estado", data.estado);
       formData.append("imagen", data.imagen[0]);
 
@@ -83,10 +100,11 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
       console.log({ ...data, idProducto });
       const formData = new FormData();
       formData.append("idProducto", parseInt(idProducto));
+      formData.append("idCategoria", IdCategoriaValue);
       formData.append("nombre", data.nombre);
+      formData.append("descripcion", data.descripcion);
       formData.append("precio", parseFloat(data.precio));
-      formData.append("costoPuntos", parseInt(data.costoPuntos));
-      formData.append("estado", parseInt(data.estado));
+      formData.append("estado", data.estado);
       formData.append("imagen", data.imagen[0]);
 
       const response = await putUpdateProducto(formData);
@@ -110,29 +128,29 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
         data={
           isUpdate
             ? [
-                {
-                  value: "Productos",
-                  href: "/admin/productos",
-                },
-                {
-                  value: nombre,
-                  href: `/admin/productos/${param}/editar`,
-                },
-                {
-                  value: "Edit",
-                  href: `/admin/productos/${param}/editar`,
-                },
-              ]
+              {
+                value: "Productos",
+                href: "/admin/productos",
+              },
+              {
+                value: nombre,
+                href: `/admin/productos/${param}/editar`,
+              },
+              {
+                value: "Edit",
+                href: `/admin/productos/${param}/editar`,
+              },
+            ]
             : [
-                {
-                  value: "Productos",
-                  href: "/admin/productos",
-                },
-                {
-                  value: "Crear",
-                  href: "/admin/productos/registro",
-                },
-              ]
+              {
+                value: "Productos",
+                href: "/admin/productos",
+              },
+              {
+                value: "Crear",
+                href: "/admin/productos/registro",
+              },
+            ]
         }
         title={"Productos"}
       />
@@ -143,7 +161,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
         encType="multipart/form-data"
       >
         <div className="p-4 border  rounded-lg bg-white">
-          {isUpdate && (
+          {/* {isUpdate && (
             <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
               <div className="sm:col-span-3">
                 <label className="flex text-sm  leading-6 text-foreground-500">
@@ -158,7 +176,41 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 />
               </div>
             </div>
-          )}
+          )} */}
+
+
+          <div className="mt-2 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
+            <div className="sm:col-span-3">
+              <AutocompleteCategorias
+                label="Categoria"
+
+                placeholder="Seleccione la categoria"
+                data={isLoading ? [] : categorias?.data}
+                name="IdCategoria"
+                register={register}
+                defaultSelectedKey={idCategoria.toString()}
+                onSelectionChange={(value) => {
+                
+                   setIdCategoriaValue(value); 
+                }}
+               
+                options={{
+                  validate: (value) => {
+                    if (value === null) {
+                      return "Este campo es requerido";
+                    }
+                  },
+                }}
+                color={IdCategoriaValue === null && "danger"}
+                isInvalid={IdCategoriaValue === null && true}
+                errorMessage={
+                  IdCategoriaValue === null && "Este campo es requerido"
+                }
+                isRequired
+              />
+            </div>
+          </div>
+
 
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
@@ -193,14 +245,39 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
+              <TextArea
+                label="Descripcion"
+                placeholder=" "
+                name="descripcion"
+                defaultValue={descripcion}
+                type="text"
+                register={register}
+                options={{
+                  required: {
+                    value: true,
+                    message: "Este campo es requerido",
+                  },
+
+                }}
+
+                color={errors.descripcion && "danger"}
+                isInvalid={errors.descripcion ? true : false}
+                errorMessage={errors.descripcion && errors.descripcion.message}
+                isRequired
+              />
+            </div>
+          </div>
+
+          <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
+            <div className="sm:col-span-3">
               <Input
                 label="Precio"
                 placeholder=" "
                 name="precio"
-                defaultValue={precio} 
+                defaultValue={precio}
                 type="text"
 
-       
+
                 register={register}
                 options={{
                   required: {
@@ -212,7 +289,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                     message: "Solo se permiten numero"
                   }
                 }}
-              
+
                 color={errors.precio && "danger"}
                 isInvalid={errors.precio ? true : false}
                 errorMessage={errors.precio && errors.precio.message}
@@ -221,7 +298,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
             </div>
           </div>
 
-          <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
+          {/*  <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
               <Input
                 label="Costo en Puntos"
@@ -252,7 +329,8 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 isRequired
               />
             </div>
-          </div>
+          </div> */}
+
 
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
@@ -263,22 +341,60 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 </p>
               </label>
 
-              <input
-                className=" mt-1 flex w-full  rounded-md  border-gray-300 border-2 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-zinc-900 file:h-8 file:text-white file:text-sm file:font-medium"
-                type="file"
-                id="picture"
-                
-                accept="image/*"
-                {...register("imagen", {
-                  validate: (value) => {
-                    if (value.length == 0) {
-                      return toast.error("Seleccione una imagen");
-                    }
-                  },
-                })}
-              />
+              <div className="flex items-center justify-center w-ful">
+                <label
+                  htmlFor="dropzone-file"
+                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
+                >
+
+                  {
+                    watch('imagen') != null && watch('imagen').length > 0 ? <div
+                      className="flex items-center justify-center w-full"
+                      htmlFor="dropzone-file"
+                    >
+
+                      <div className="flex flex-col items-center justify-center">
+                        <img
+                          src={typeof watch('imagen') === 'string' ? watch('imagen') : URL.createObjectURL(watch('imagen')[0])}
+                          alt="uploaded-image"
+                          accept="image/jpeg, image/png, image/jpg"
+                          className="object-fit max-h-60 p-3"
+                        />
+                      </div>
+
+                    </div> : (<div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <UploadImage />
+
+                      <p className="mb-2 text-sm text-gray-500">
+                        <span className="font-semibold">Haga clic para cargar</span> o
+                        arrastrar y soltar
+                      </p>
+                    </div>)
+                  }
+
+
+                  <input
+
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+
+                    accept="image/*"
+                    {...register("imagen", {
+                      validate: (value) => {
+                        if (value.length == 0) {
+                          return toast.error("Seleccione una imagen");
+                        }
+                      },
+                    })}
+
+                  >
+                  </input>
+                </label>
+              </div>
             </div>
           </div>
+
 
           <div className="mt-1 grid grid-cols-1 gap-x-6 sm:grid-cols-4">
             <div className="sm:col-span-3">
@@ -314,7 +430,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
               <Button
                 isLoading={isLoadingUpdate}
                 type="submit"
-                className="bg-neutral-900 text-white  w-48 my-4"
+                className=" w-48 my-4"
               >
                 Actualizar
               </Button>
@@ -323,7 +439,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 <Button
                   isLoading={isLoadingCreate && lastClickedButton === "crear"}
                   type="submit"
-                  className="bg-neutral-900 text-white  w-10 my-4"
+                  className="  w-10 my-4"
                   onClick={() => setLastClickedButton("crear")}
                 >
                   Crear

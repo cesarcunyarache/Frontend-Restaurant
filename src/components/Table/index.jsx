@@ -458,7 +458,7 @@ export default function Index({
               color="default"
               variant="bordered"
               size="sm"
-              className="gap-0 border-hidden font-bold hover:underline"
+              className="gap-0 border-hidden text-primary font-bold hover:underline"
               startContent={<Edit />}
               onClick={() => {
                 router.push(`/admin/productos/${user?.idProducto}/editar`);
@@ -530,7 +530,7 @@ export default function Index({
               <h1 className="text-2xl font-bold text-center mb-2">Reservas</h1>
             </div>
           )}
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center pb-2">
             {status && (
               <Dropdown>
                 <DropdownTrigger className="hidden sm:flex">
@@ -758,7 +758,7 @@ export default function Index({
           <TableRow
             key={
               /* item.idReserva ? item?.idReserva : item?.idCliente || item?.idProducto ? item?.idCliente : item?.idEmpleado */
-              item.idEmpleado ?? item.idCliente ?? item.idCategoria
+              item.idVenta ?? item.idEmpleado ?? item.idCliente ?? item.idCategoria
             }
           >
             {(columnKey) => (

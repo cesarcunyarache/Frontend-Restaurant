@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import SideBar from "@/components/SideBar";
 import { useDispatch, useSelector } from "react-redux";
-import { update } from "@/redux/features/loadSlice";
+
 import Load from "@/components/Load";
 export default function AdminLayout({ children }) {
   /*   const load = useSelector((state) => state.loadReducer);
@@ -11,7 +11,7 @@ export default function AdminLayout({ children }) {
   return (
     <div className="flex w-full h-screen bg-gray-100">
       <SideBar />
-      <main className=" w-full overflow-auto mt-[72px] mb-2  ">{children}</main>
+      <main className=" w-full overflow-auto mt-[72px] mb-2 ">{children}</main>
     </div>
   );
 }

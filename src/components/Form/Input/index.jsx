@@ -19,11 +19,15 @@ export default function index({ className = "", name = "", endContent = null, re
       type="text"
       color="warning"
       borderColor="orange"
-      {...props}
+    
       {...register(name, options)}
       endContent={
         endContent
       }
+     
+      {...props}
+
+   
     />
   );
 }

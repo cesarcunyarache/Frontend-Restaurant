@@ -46,12 +46,12 @@ export default function Login() {
     <div className="flex w-full h-screen">
 
       <div className="w-full h-full lg:min-w-[60%] hidden md:block">
-        <img src="https://img.freepik.com/foto-gratis/mesa-comidas-refrescos-restaurante_114579-3319.jpg?t=st=1715534692~exp=1715538292~hmac=3396720fe06a885c9f0e8d509c99dd83b3c78dbd0c60e50de32adc070b79b9d3&w=900" alt="" className="object-cover h-full w-full" />
+        <img src="/login.jpg" alt="" className="object-cover h-full w-full  rounded-r-3xl py-[.2px] " />
 
       </div>
 
 
-      <div className="w-full flex  justify-center items-center">
+      <div className="w-full flex  justify-center items-center ">
         <Form onSubmit={onSubmit} method="POST" noValidate className="border-0 min-w-[90%] lg:px-[4rem] items-center ">
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 mb-3">

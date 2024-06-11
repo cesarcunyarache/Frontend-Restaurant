@@ -5,17 +5,21 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import React from "react";
 import Table from "@/components/Table";
 import { useGetProductosQuery } from "@/redux/services/productoApi";
+import { PlusIcon } from "@/components/Icon/PlusIcon";
+import Button from "@/components/Form/Button";
+import { useRouter } from "next/navigation";
+
+
 export default function Page() {
   const { data, isLoading, isError, error } = useGetProductosQuery();
-
- 
+  const router = useRouter();
   const users =  !isLoading ? data.data :  [];
 
   const inicialVisibleColumns = [
     "idProducto",
     "infoProducto",
-    "costoPuntos",
-    "estadoProducto",
+    "descripcion",
+    "estado",
     "accionProducto",
   ];
 
@@ -30,12 +34,12 @@ export default function Page() {
       search: true,
     },
     {
-      name: "Costo por Puntos",
-      uid: "costoPuntos",
+      name: "Descripcion",
+      uid: "descripcion",
       sortable: true,
       search: true,
     },
-    { name: "Estado", uid: "estadoProducto", sortable: true },
+    { name: "Estado", uid: "estado", sortable: true },
     { name: "Accion", uid: "accionProducto" },
   ];
 
@@ -64,7 +68,13 @@ export default function Page() {
           btn="Nuevo Producto"
           btnLink="productos/registro"
           statusProductos={true} 
-        
+          statusFilterDrown={true}
+          buttonTable={<Button
+            endContent={<PlusIcon />}
+            onClick={() => {
+              router.push("productos/registro");
+            }}
+          > Nuevo Producto</Button>}
         />
       </div>
     </div>

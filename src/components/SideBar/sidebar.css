@@ -1,30 +1,13 @@
-
-.menu{
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    font-size: 30px;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    cursor: pointer;
-    background-color: #242424;
-    color: white;
-    right: 15px;
-    top: 15px;
-    z-index: 100;
-}
-
-.barra-lateral{
-    transition: all 0.5s ease,background-color 0.3s ease,left 0.5s ease;
+.barra-lateral {
+    transition: all 0.5s ease, background-color 0.3s ease, left 0.5s ease;
 }
 
 
-.barra-lateral span{
-    transition: opacity 0.5s ease,width 0.5s ease;
+.barra-lateral span {
+    transition: opacity 0.5s ease, width 0.5s ease;
 }
-.barra-lateral span.oculto{
+
+.barra-lateral span.oculto {
     opacity: 0;
     width: 0;
 }
@@ -34,39 +17,61 @@
     padding: 20px;
     transition: margin-left 0.5s ease;
 } */
-main.min-main{
+main.min-main {
     margin-left: 80px;
 }
 
-@media (max-height: 660px){
-    .barra-lateral .nombre-pagina{
+@media (max-height: 660px) {
+    /*  .barra-lateral .nombre-pagina{
         margin-bottom: 5px;
     }
     .barra-lateral .modo-oscuro{
         margin-bottom: 3px;
-    }
+    } */
 }
-@media (max-width: 850px){
-    .barra-lateral{
+
+/* 
+.close {
+    position: fixed;
+    left: -320px;
+    transition: left 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+
+}
+
+.spanded {
+    z-index: 100;
+    position: sticky;
+    right: 320px;
+    transition: left 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+
+}
+ */
+.close {
+    position: fixed;
+    left: -320px;
+    transition: left 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+    z-index: 1000;
+    /* Asegúrate de que este valor sea mayor que el de otros elementos */
+}
+
+.spanded {
+    z-index: 1000;
+    /* Asegúrate de que este valor sea mayor que el de otros elementos */
+    position: fixed;
+    right: 0;
+    /* Ajuste el valor para que se superponga correctamente */
+    transition: right 0.5s ease, background-color 0.3s ease, right 0.5s ease;
+}
+
+
+@media (max-width: 640px) {
+
+    .barra-lateral {
         position: fixed;
-        left: -300px;
-        transition: left 0.5s ease,background-color 0.3s ease,left 0.5s ease;
-       
+        left: -320px;
+        transition: left 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+
     }
-    .max-barra-lateral{
-        left: 0;
-    }
-    .menu{
-        display: flex;
-    }
-    .menu svg:nth-child(2){
-        display: none;
-    }
-    main{
-        margin-left: 0;
-    }
-    main.min-main{
-        margin-left: 0;
-    }
-    
+
+
 }

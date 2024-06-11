@@ -24,6 +24,12 @@ export const clienteApi = createApi({
       providesTags: (result, error, id) => [{ type: "getSearchById", id }],
     }),
 
+
+    getSearchClienteByNumeroDoc: builder.query({
+      query: (id) => ({ url: `cliente/numero-doc/${id}` }),
+      providesTags: (result, error, id) => [{ type: "getSearchClienteByNumeroDoc", id }],
+    }),
+
     postCreate: builder.mutation({
       query: (data) => ({
         url: "cliente/",
@@ -32,6 +38,25 @@ export const clienteApi = createApi({
         credentials: "include",
       }),
       invalidatesTags: ["clientes"],
+    }),
+
+    postCreatePatchParams: builder.mutation({
+      query: (data) => ({
+        url: "cliente/patch/",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["clientes"],
+    }),
+
+    postClientByNumeroDoc: builder.mutation({
+      query: (data) => ({
+        url: "cliente/numero-doc/",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
     }),
 
     putUpdate: builder.mutation({
@@ -47,9 +72,19 @@ export const clienteApi = createApi({
       invalidatesTags: (result, error, { id }) => [
         { type: "clientes" },
         { type: "getSearchById", id },
+        { type: "getSearchClienteByNumeroDoc", id },
       ],
     }),
   }),
 });
 
-export const { useGetClientesQuery, useGetUsuariosClientesQuery, usePostCreateMutation, useGetSearchByIdQuery, usePutUpdateMutation } = clienteApi;
+export const {
+  useGetClientesQuery,
+  useGetUsuariosClientesQuery,
+  usePostCreateMutation,
+  useGetSearchByIdQuery,
+  usePutUpdateMutation,
+  useLazyGetSearchClienteByNumeroDocQuery,
+  usePostClientByNumeroDocMutation,
+  usePostCreatePatchParamsMutation
+} = clienteApi;
