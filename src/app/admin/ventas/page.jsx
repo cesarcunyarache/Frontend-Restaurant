@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 
 export default function Page() {
 
-  const [selected, setSelected] = useState('grid')
+  const [selected, setSelected] = useState('table')
 
   const [isFollowed, setIsFollowed] = useState(false);
 
@@ -25,22 +25,22 @@ export default function Page() {
   const router = useRouter();
 
   const sales = useSelector((state) => state?.sales?.salesState?.value);
-  console.log(sales)
 
   const inicialVisibleColumns = [
     "idVenta",
-    "idCliente",
-    "idEmpleado",
+    "infoCliente",
     "fecha",
     "hora",
+    "total",
+    "infoEmpleado",
   ];
 
   const columns = [
     { name: "ID", uid: "idVenta", sortable: true, search: true },
-    { name: "ID Cliente", uid: "idCliente", search: true },
-    { name: "ID Empleado", uid: "idEmpleado", sortable: true, search: true },
+    { name: "Cliente", uid: "infoCliente", search: true },
     { name: "Fecha", uid: "fecha", sortable: true, search: true },
     { name: "Hora", uid: "hora", sortable: true, search: true },
+    { name: "Empleado", uid: "infoEmpleado", sortable: true, search: true },
     { name: "IGV", uid: "igv", sortable: true, search: true },
     { name: "Total", uid: "total", sortable: true, search: true },
   ];
@@ -64,7 +64,7 @@ export default function Page() {
           title={"Ventas"}
         />
 
-        <div className="flex  flex-col  ">
+        {/*<div className="flex  flex-col  ">
           <Tabs aria-label="Options" color="primary" variant="bordered" selectedKey={selected}
             onSelectionChange={setSelected}>
             <Tab
@@ -72,29 +72,26 @@ export default function Page() {
               title={
                 <div className="flex items-center space-x-2">
                   <TableIcon />
-                  {/*   <span>Tabla</span> */}
+                  {/*   <span>Tabla</span> 
                 </div>
-              }
+              
             />
             <Tab
               key="grid"
               title={
                 <div className="flex items-center space-x-2">
                   <GridIcon />
-                  {/*  <span>Grilla</span> */}
+                  {/*  <span>Grilla</span> 
                 </div>
               }
             />
 
           </Tabs>
-        </div>
+        </div>*/}
       </div>
 
 
       <div className="w-full h-full">
-
-        {
-          selected === 'table' ?
 
             <div className="w-full h-full border rounded-lg mt-4 bg-white p-4">
 
@@ -113,6 +110,9 @@ export default function Page() {
                   }}
                 > Nueva Venta</Button>} />
             </div>
+        {/*
+          selected === 'table' ?
+
 
             :
 
@@ -121,8 +121,8 @@ export default function Page() {
 
 
               {
-                sales.map((sale) => {
-                  return <Card className="w-72" >
+                sales.map((sale, index) => {
+                  return <Card key={index} className="w-72" >
                     <CardHeader className="justify-between">
                       <div className="flex gap-5">
                         <Avatar isBordered radius="full" size="md" src="" />
@@ -170,7 +170,7 @@ export default function Page() {
 
 
             </div>
-        }
+        */}
 
 
       </div>

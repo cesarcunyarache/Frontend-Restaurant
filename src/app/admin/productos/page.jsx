@@ -13,12 +13,12 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const { data, isLoading, isError, error } = useGetProductosQuery();
   const router = useRouter();
-  const users =  !isLoading ? data.data :  [];
+  const users =  !isLoading ? data?.data :  [];
 
   const inicialVisibleColumns = [
     "idProducto",
     "infoProducto",
-    "descripcion",
+    "categoria",
     "estado",
     "accionProducto",
   ];
@@ -39,6 +39,7 @@ export default function Page() {
       sortable: true,
       search: true,
     },
+    { name: "Categoria", uid: "categoria", sortable: true,  search: true,},
     { name: "Estado", uid: "estado", sortable: true },
     { name: "Accion", uid: "accionProducto" },
   ];
@@ -69,6 +70,7 @@ export default function Page() {
           btnLink="productos/registro"
           statusProductos={true} 
           statusFilterDrown={true}
+        
           buttonTable={<Button
             endContent={<PlusIcon />}
             onClick={() => {

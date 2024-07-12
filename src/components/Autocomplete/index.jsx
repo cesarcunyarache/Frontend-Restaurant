@@ -6,7 +6,7 @@ import {
   Avatar,
   Divider,
 } from "@nextui-org/react";
-import { Main } from "next/document";
+
 
 export default function index({
   data = [],
@@ -22,7 +22,7 @@ export default function index({
       labelPlacement="outside"
       radius="sm"
       size="md"
-      className="label:text-lime-500"
+      className=""
       inputProps={{
         classNames: {
           inputWrapper: "group-data-[focus=true]:border-primary data-[hover=true]:border-[#E6E6E6]",
@@ -30,10 +30,10 @@ export default function index({
       }}
       classNames={{
         label: [
-          "text-lime-500"
+          ""
         ],
         base: [
-          "text-lime-500",
+          "",
   
 
 
@@ -43,7 +43,7 @@ export default function index({
 
         inputWrapper: [
           "bg-teal-300",
-          "text-lime-500",
+          "",
         ]
   
 

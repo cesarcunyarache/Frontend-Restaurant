@@ -6,6 +6,7 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API,
     credentials: "include",
+    
   }),
   tagTypes: ["Profile"],
   endpoints: (builder) => ({

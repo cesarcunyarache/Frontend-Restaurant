@@ -94,7 +94,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const [idEmpleado, setIdColaborador] = useState(param);
 
-  const { data: colab, isLoading } = useGetColaboradoresQuery();
+  const { data: colab, isLoading, refetch, } = useGetColaboradoresQuery();
 
   const router = useRouter();
   const [postRegister, { isLoading: isLoadingCreate }] =
@@ -164,7 +164,10 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
             onClose();
             if (lastClickedButton === "crear") {
               router.push("/admin/usuarios");
+              
             } else if (lastClickedButton === "crearOtro") {
+              router.push("/admin/usuarios/registro");
+              refetch();
               reset();
             }
           }
@@ -394,7 +397,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                     label="Rol"
                     data={[
                       { key: 1, value: "Administrador" },
-                      { key: 2, value: "Colaborador" },
+                      { key: 2, value: "Empleado" },
                     ]}
                     name="idRol"
                     {...(idTipoDoc !== ""
@@ -431,7 +434,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
                 <Button
                   type="submit"
                   isLoading={
-                    isLoadingCreate && lastClickedButton === "crearOtro"
+                    isLoadingOTP && lastClickedButton === "crearOtro"
                   }
                   className="bg-zinc-50 border-2 text-black w-50 my-4"
                   onClick={() => setLastClickedButton("crearOtro")}

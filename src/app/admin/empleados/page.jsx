@@ -26,7 +26,7 @@ export default function Page() {
   ];
 
   const columns = [
-    { name: "ID", uid: "idEmpleado", sortable: true, search: true },
+    { name: "ID", uid: "idEmpleado", sortable: true },
     { name: "Tipo de Documento", uid: "idTipoDoc", search: true },
     { name: "Número de documento", uid: "numeroDoc", sortable: true, search: true },
     { name: "Nombres", uid: "nombres", sortable: true, search: true },

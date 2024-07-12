@@ -10,7 +10,7 @@ import {
   usePutUpdateProductoMutation,
 } from "@/redux/services/productoApi";
 
-import {useGetCategoriasQuery} from "@/redux/services/categoriaApi"
+import { useGetCategoriasQuery } from "@/redux/services/categoriaApi"
 import Select from "@/components/Form/Select";
 import TextArea from "@/components/Form/TextArea";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -19,7 +19,7 @@ import AutocompleteCategorias from "@/components/Autocomplete/AutoCompleteCatego
 import UploadImage from "@/components/Icon/UploadImage";
 
 export default function Page({ data = {}, isUpdate = false, param = "" }) {
-  const { nombre, descripcion, precio, estado, imagen, costoPuntos , idCategoria} = data?.data ?? {
+  const { nombre, descripcion, precio, estado, imagen, costoPuntos, idCategoria } = data?.data ?? {
     idCategoria: "",
     nombre: "",
     descripcion: "",
@@ -48,7 +48,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const { data: categorias, isLoading } = useGetCategoriasQuery();
 
- 
+
   const {
     register,
     handleSubmit,
@@ -67,7 +67,6 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmitDefault = handleSubmit(async (data) => {
     try {
-      console.log(data);
 
       const formData = new FormData();
       formData.append("idCategoria", IdCategoriaValue);
@@ -76,7 +75,6 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
       formData.append("precio", parseFloat(data.precio));
       formData.append("estado", data.estado);
       formData.append("imagen", data.imagen[0]);
-
       const response = await postCreateProducto(formData);
       if (response?.error) {
         console.log(response?.error);
@@ -97,7 +95,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
 
   const onSubmitUpdate = handleSubmit(async (data) => {
     try {
-      console.log({ ...data, idProducto });
+      /*    console.log({ ...data, idProducto }); */
       const formData = new FormData();
       formData.append("idProducto", parseInt(idProducto));
       formData.append("idCategoria", IdCategoriaValue);
@@ -106,6 +104,7 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
       formData.append("precio", parseFloat(data.precio));
       formData.append("estado", data.estado);
       formData.append("imagen", data.imagen[0]);
+
 
       const response = await putUpdateProducto(formData);
       if (response?.error) {
@@ -183,17 +182,16 @@ export default function Page({ data = {}, isUpdate = false, param = "" }) {
             <div className="sm:col-span-3">
               <AutocompleteCategorias
                 label="Categoria"
-
                 placeholder="Seleccione la categoria"
                 data={isLoading ? [] : categorias?.data}
                 name="IdCategoria"
                 register={register}
                 defaultSelectedKey={idCategoria.toString()}
                 onSelectionChange={(value) => {
-                
-                   setIdCategoriaValue(value); 
+                  console.log(value)
+                  setIdCategoriaValue(value);
                 }}
-               
+
                 options={{
                   validate: (value) => {
                     if (value === null) {

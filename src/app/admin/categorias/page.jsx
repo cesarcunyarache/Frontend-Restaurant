@@ -13,14 +13,14 @@ export default function Page() {
   const { data, isLoading, isError, error } = useGetCategoriasQuery();
 
   const router = useRouter();
-  const users = !isLoading ? data.data : [];
+  const users = !isLoading ? data?.data : [];
 
   console.log(users)
 
 
   const inicialVisibleColumns = [
+    "idCategoria",
     "categoria",
-    "descripcion",
     "imagen",
     "estado",
     "accionEditarCategoria",
@@ -32,8 +32,8 @@ export default function Page() {
       name: "Imagen",
       uid: "imagen",
     },
-    { name: "Categoria", uid: "categoria" },
-    { name: "Descipción", uid: "descripcion", sortable: true, search: true },
+    { name: "Categoria", uid: "categoria",  sortable: true, search: true },
+    { name: "Descipción", uid: "descripcion", search: true },
     {
       name: "Estado",
       uid: "estado",

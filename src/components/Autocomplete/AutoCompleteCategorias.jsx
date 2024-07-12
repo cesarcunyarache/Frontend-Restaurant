@@ -36,6 +36,8 @@ export default function index({
 
     >
       {(data) => {
+
+        if (data.estado == 1) {
     
           return (
             <AutocompleteItem key={data.idCategoria} textValue={data.categoria} classNames={{
@@ -62,6 +64,7 @@ export default function index({
             </AutocompleteItem>
           );
         }
+      }
     }
     </Autocomplete>
   );

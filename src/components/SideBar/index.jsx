@@ -246,12 +246,12 @@ export default function SideBar() {
                             }}>
                             Perfil
                           </DropdownItem>
-                          <DropdownItem key="cuenta" startContent={<Cuenta />} onClick={() => {
+                          <DropdownItem key="cuenta" showDivider startContent={<Cuenta />} onClick={() => {
                             router.push("/admin/mi-cuenta");
                           }}>
                             Mi cuenta
                           </DropdownItem>
-                          <DropdownItem
+                          {/* <DropdownItem
                             key="qr"
                             showDivider
                             startContent={<Qr />}
@@ -260,7 +260,7 @@ export default function SideBar() {
                             }}
                           >
                             Qr
-                          </DropdownItem>
+                          </DropdownItem> */}
                           <DropdownItem
                             key="Logout"
                             className="text-danger"

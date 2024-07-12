@@ -15,7 +15,7 @@ import {
   User,
   Pagination,
   Spinner,
-  Avatar
+  Avatar,
 } from "@nextui-org/react";
 import { PlusIcon } from "./PlusIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
@@ -82,6 +82,7 @@ export default function Index({
   isActiveBtn = false,
   isSearch = true,
   statusFilterDrown = false,
+  filterCategory = false,
   statusMeseros = false,
   buttonTable = null,
 }) {
@@ -90,10 +91,13 @@ export default function Index({
 
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState(new Set([]));
+
+  const [selectedKeysCategory, setSelectedKeysCategory] = useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(inicialVisibleColumns)
   );
   const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortDescriptor, setSortDescriptor] = useState({
     column: "id",
@@ -135,13 +139,29 @@ export default function Index({
       statusFilter !== "all" &&
       Array.from(statusFilter)?.length !== statusOptions?.length
     ) {
+      console.log( statusFilter)
+     
       filteredUsers = filteredUsers?.filter((user) =>
         Array.from(statusFilter)?.includes(user.estado)
       );
     }
+    if (categoryFilter && categoryFilter !== "all" &&
+      Array.from(categoryFilter)
+      
+    ) {
+      console.log(categoryFilter);
+      filteredUsers = filteredUsers.filter((user) =>
+       { 
+
+         return Array.from(categoryFilter)?.includes(user.idCategoria)
+       }
+      );
+    }
+
+    console.log(filteredUsers)
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [users, filterValue, statusFilter, categoryFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -180,7 +200,34 @@ export default function Index({
             {user?.numeroDoc}
           </User>
         );
-
+      case "infoCliente":
+        return (
+          <User
+            avatarProps={{              
+              radius: "full",
+              isBordered: true,
+              className: "mr-2 ", //animate-pulse
+            }}
+            description={user?.numeroDocCliente}
+            name={user?.idCliente == null ? 'Desconocido' : user?.nombresCliente}
+          >
+            {user?.numeroDocCliente}
+          </User>
+        );
+      case "infoEmpleado":
+        return (
+          <User
+            avatarProps={{
+              radius: "lg",
+              isBordered: true,
+              className: "mr-2 ", //animate-pulse
+            }}
+            description={user?.numeroDocEmpleado}
+            name={user?.nombresEmpleado}
+          >
+            {user?.numeroDocEmpleado}
+          </User>
+        );
       case "infoClient":
         return (
           <User
@@ -195,7 +242,6 @@ export default function Index({
             {user?.numeroDoc}
           </User>
         );
-
       case "infoMesero":
         return (
           <User
@@ -212,12 +258,15 @@ export default function Index({
             {user?.numeroDoc}
           </User>
         );
-
       case "imagen":
         return (
-          <Avatar isBordered radius="full" src={user.imagen} name={user.categoria} />
+          <Avatar
+            isBordered
+            radius="full"
+            src={user.imagen}
+            name={user.categoria}
+          />
         );
-
       case "infoProducto":
         return (
           <User
@@ -235,7 +284,6 @@ export default function Index({
             {user?.precio}
           </User>
         );
-
       case "role":
         return (
           <div className="flex flex-col">
@@ -256,7 +304,6 @@ export default function Index({
             {statusColorMap[user.estado].text}
           </Chip>
         );
-
       case "estado":
         return (
           <Chip
@@ -268,8 +315,6 @@ export default function Index({
             {statusColorMapProducto[user.estado].text}
           </Chip>
         );
-
-
       case "estadoMesero":
         return (
           <Chip
@@ -281,7 +326,6 @@ export default function Index({
             {statusColorMapProducto[user.estado].text}
           </Chip>
         );
-
       case "accionReserva":
         return (
           <div className="relative flex justify-start items-center gap-2">
@@ -339,18 +383,17 @@ export default function Index({
                   </DropdownItem>
                 )} */}
 
-                <DropdownItem
+                {/*<DropdownItem
                   onClick={() => {
                     router.push(`/admin/meseros/registro/${user?.idEmpleado}`);
                   }}
                 >
                   Crear Venta
-                </DropdownItem>
+                </DropdownItem>*/}
               </DropdownMenu>
             </Dropdown>
           </div>
         );
-
       case "accion":
         return (
           <div className="relative flex justify-start items-center gap-2">
@@ -372,7 +415,9 @@ export default function Index({
                 {user?.idUsuario === null ? (
                   <DropdownItem
                     onClick={() => {
-                      router.push(`/admin/usuarios/registro/${user?.idEmpleado}`);
+                      router.push(
+                        `/admin/usuarios/registro/${user?.idEmpleado}`
+                      );
                     }}
                   >
                     Crear Usuario
@@ -387,13 +432,13 @@ export default function Index({
                   </DropdownItem>
                 )}
 
-                <DropdownItem
+               { /*<DropdownItem
                   onClick={() => {
                     router.push(`/admin/meseros/registro/${user?.idEmpleado}`);
                   }}
                 >
                   Crear o Editar Mesero
-                </DropdownItem>
+                </DropdownItem>*/}
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -415,7 +460,6 @@ export default function Index({
             </Button>
           </div>
         );
-
       case "accionEditarCategoria":
         return (
           <div className="relative py-2 flex justify-start items-center gap-2">
@@ -450,7 +494,6 @@ export default function Index({
             </Button>
           </div>
         );
-
       case "accionProducto":
         return (
           <div className="relative py-2 flex justify-start items-center gap-2">
@@ -511,8 +554,9 @@ export default function Index({
     return (
       <div className="flex flex-col gap-4">
         <div
-          className={`flex gap-3 items-end ${isSearch ? "justify-between" : "justify-between"
-            }`}
+          className={`flex gap-3 items-end ${
+            isSearch ? "justify-between" : "justify-between"
+          }`}
         >
           {isSearch && (
             <Input
@@ -554,6 +598,36 @@ export default function Index({
                       {capitalize(status.name)}
                     </DropdownItem>
                   ))}
+                </DropdownMenu>
+              </Dropdown>
+            )}
+
+            {filterCategory && (
+              <Dropdown>
+                <DropdownTrigger className="hidden sm:flex">
+                  <Button
+                    endContent={<ChevronDownIcon className="text-small" />}
+                    variant="flat"
+                  >
+                    Categoria
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeysCategory={categoryFilter}
+                  selectionMode="multiple"
+                  onSelectionChange={setCategoryFilter}
+                >
+                  
+                    <DropdownItem key="1" className="capitalize">
+                      {capitalize('Cocina - Autor')}
+                    </DropdownItem>
+                    <DropdownItem key="2" className="capitalize">
+                      {capitalize('Entradas - Ceviche')}
+                    </DropdownItem>
+                  
                 </DropdownMenu>
               </Dropdown>
             )}
@@ -637,9 +711,7 @@ export default function Index({
               </DropdownMenu>
             </Dropdown>
 
-            {buttonTable != null && (
-              buttonTable
-            )}
+            {buttonTable != null && buttonTable}
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -667,6 +739,7 @@ export default function Index({
   }, [
     filterValue,
     statusFilter,
+    filterCategory,
     visibleColumns,
     onRowsPerPageChange,
     users.length,
@@ -714,7 +787,7 @@ export default function Index({
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, items.length, page, pages, hasSearchFilter, selectedKeysCategory]);
 
   return (
     <Table
@@ -758,7 +831,11 @@ export default function Index({
           <TableRow
             key={
               /* item.idReserva ? item?.idReserva : item?.idCliente || item?.idProducto ? item?.idCliente : item?.idEmpleado */
-              item.idVenta ?? item.idEmpleado ?? item.idCliente ?? item.idCategoria
+              item.idVenta ??
+              item.idEmpleado ??
+              item.idCliente ??
+              item.idProducto ??
+              item.idCategoria
             }
           >
             {(columnKey) => (

@@ -6,8 +6,6 @@ import { useGetSearchByIdQuery } from "@/redux/services/colaboradorApi";
 export default function PageEditar({ params, isEditProfile = false }) {
   const { data, isLoading, refetch } = useGetSearchByIdQuery(params?.id);
 
-
-  console.log(params?.id)
   useEffect(() => {
     refetch();
   }, [])
