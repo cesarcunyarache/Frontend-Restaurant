@@ -71,7 +71,7 @@ export default function UpdatePassword(dataUser = {}) {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="border rounded-lg bg-white mt-5 ">
+      <form onSubmit={onSubmit} className="border rounded-lg bg-white mt-5 max-w-2xl ">
         <div className="border-b py-4 px-4">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
             Actualizar Contraseña
